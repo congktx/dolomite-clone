@@ -95,8 +95,8 @@ const DetailStrategy = ({ strategy }) => {
             <div className="rainbow-border"
                 style={{
                     position: 'absolute',
-                    top: '335px',
-                    left: '25.3%',
+                    top: '45vh',
+                    left: '25.2%',
                     zIndex: 4,
                 }}
             >
@@ -106,6 +106,8 @@ const DetailStrategy = ({ strategy }) => {
                 className="detail_strategy"
                 style={{
                     position: 'absolute',
+                    top: '0%',
+                    left: '0%',
                     width: '50vw',
                     height: '90vh',
                     backgroundColor: '#292938',
@@ -347,6 +349,7 @@ const DetailStrategy = ({ strategy }) => {
                                 fontSize: '12px',
                                 fontWeight: 'normal',
                                 display: 'flex',
+                                gap: '3px',
                             }}
                         >
                             <span>Staking</span>
@@ -402,7 +405,7 @@ const DetailStrategy = ({ strategy }) => {
                                 gap: '3px',
                             }}
                         >
-                            <span>USDC</span>
+                            <span>{strategy.debt}</span>
                             <span>Borrow</span>
                             <span>APR:</span>
                             <span
@@ -422,7 +425,7 @@ const DetailStrategy = ({ strategy }) => {
                             position: 'absolute',
                             color: '#606375',
                             fontSize: '12px',
-                            bottom: '0%',
+                            bottom: '1%',
                             right: '3%',
                             display: 'flex',
                             gap: '3px',

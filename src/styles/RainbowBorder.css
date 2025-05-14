@@ -15,8 +15,7 @@
     );
     background-size: 1800% 1800%;
     animation: rainbow 18s ease infinite;
-    padding: 6px; /* Kích thước của viền cầu vồng */
-    z-index: 5;
+    padding: 6px; 
 }
 
 @keyframes rainbow { 
