@@ -26,11 +26,13 @@ const riskSvgs = [
 const backgroundColorTag = {
     "Yield Maximizing": "#228b22",
     "Δ Neutral": "#5d869e",
+    "GMX": "#5d8612",
 };
 
 const witdhTag = {
     "Yield Maximizing": 95.19,
     "Δ Neutral": 59.6,
+    "GMX": 40,
 };
 
 const levelRows = [20, 45, 60, 120, 160];

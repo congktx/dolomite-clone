@@ -53,27 +53,12 @@ const EthIcon = () => (
     </div>
 );
 
-const GlpIcon = () => (
-    <div className="token-icon glp">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="16" fill="#1E293B" />
-            <path d="M8 12h16v8H8v-8z" fill="#3A9BDC" />
-            <path d="M16 14l4 4H12l4-4z" fill="white" />
-        </svg>
-    </div>
-);
 
 const tokenData = [
     { symbol: 'AAVE', name: 'Aave Token', balance: '0.0000', value: '$0.00', icon: <AaveIcon /> },
     { symbol: 'ARB', name: 'Arbitrum', balance: '0.0000', value: '$0.00', icon: <ArbIcon /> },
     { symbol: 'DAI', name: 'Dai Stablecoin', balance: '0.0000', value: '$0.00', icon: <DaiIcon /> },
     { symbol: 'ETH', name: 'Ethereum', balance: '0.0000', value: '$0.00', icon: <EthIcon /> },
-    { symbol: 'ezETH', name: 'Renzo Restaked ETH', balance: '0.0000', value: '$0.00', icon: <EthIcon /> },
-    { symbol: 'GLP', name: 'GMX LP', balance: '0.0000', value: '$0.00', icon: <GlpIcon /> },
-    { symbol: 'GLV-BTC', name: 'GLV: BTC-USD', balance: '0.0000', value: '$0.00', icon: <GlpIcon /> },
-    { symbol: 'GLV-ETH', name: 'GLV: ETH-USD', balance: '0.0000', value: '$0.00', icon: <GlpIcon /> },
-    { symbol: 'gmAAVE-USD', name: 'GM: AAVE-USD', balance: '0.0000', value: '$0.00', icon: <AaveIcon /> },
-    { symbol: 'gmARB-USD', name: 'GM: ARB-USD', balance: '0.0000', value: '$0.00', icon: <ArbIcon /> },
 ];
 
 function BalancePanel() {

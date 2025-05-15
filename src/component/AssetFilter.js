@@ -11,19 +11,19 @@ import {
 const TokenIcon = ({ type }) => {
     const getIcon = () => {
         switch (type) {
-            case 'mETH':
+            case 'ETH':
                 return (
                     <div className="token-icon eth-icon">
                         <span>m</span>
                     </div>
                 );
-            case 'wstETH':
+            case 'DAI':
                 return (
                     <div className="token-icon wst-icon">
                         <span>w</span>
                     </div>
                 );
-            case 'gmETH':
+            case 'BNB':
                 return (
                     <div className="token-icon gm-eth-icon">
                         <span>g</span>
@@ -63,18 +63,13 @@ const TokenIcon = ({ type }) => {
 
 const tokens = {
     collateral: [
-        { id: 'mETH', name: 'mETH', type: 'mETH' },
-        { id: 'wstETH', name: 'wstETH', type: 'wstETH' },
-        { id: 'gmETH', name: 'gmETH', type: 'gmETH' },
-        { id: 'gmBTC', name: 'gmBTC', type: 'gmBTC' },
-        { id: 'gmUNI-USD', name: 'gmUNI-USD', type: 'gmUNI-USD' },
-        { id: 'gmLINK-USD', name: 'gmLINK-USD', type: 'gmLINK-USD' },
-        { id: 'PT-USDe', name: 'PT-USDe', type: 'PT-USDe' }
+        { id: 'ETH', name: 'ETH', type: 'ETH' },
+        { id: 'DAI', name: 'DAI', type: 'DAI' },
+        { id: 'BNB', name: 'BNB', type: 'BNB' },
     ],
     debt: [
         { id: 'USDC', name: 'USDC', type: 'USDC' },
-        { id: 'DAI', name: 'DAI', type: 'DAI' },
-        { id: 'USDe', name: 'USDe', type: 'USDe' }
+        { id: 'USDT', name: 'USDT', type: 'USDT' },
     ]
 };
 

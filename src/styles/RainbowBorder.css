@@ -1,4 +1,7 @@
 .rainbow-border {
+    position: absolute; 
+    top: 4.3%;
+    left: 29.6%;
     width: 50vw;
     height: 90vh;
     border-radius: 8px;
@@ -16,6 +19,7 @@
     background-size: 1800% 1800%;
     animation: rainbow 18s ease infinite;
     padding: 6px; 
+    z-index: 4;
 }
 
 @keyframes rainbow { 
@@ -23,13 +27,3 @@
     50% { background-position: 100% 19% }
     100% { background-position: 0% 82% }
 }
-
-/* Đảm bảo DetailStrategy theo vị trí cuộn trang */
-@media (min-width: 768px) {
-    .rainbow-border {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-} 

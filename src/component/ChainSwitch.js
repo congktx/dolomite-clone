@@ -1,36 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSwitchChain } from "wagmi"
+import arbitrum_logo from "./image/arbitrum-logo.png"
+import eth_logo from "./image/ethereum-logo.png"
 
 const chainSupported = {
     1: "Ethereum",
-    42_161: "Arbitrum",
+    42161: "Arbitrum",
 };
 const indexChain = {
     1: 0,
-    42_161: 1,
+    42161: 1,
 };
+
+const logoChain = {
+    1: eth_logo,
+    42161: arbitrum_logo,
+}
 
 function ChainSwitch() {
     const { chains, switchChain } = useSwitchChain()
-    const [selectedChain, setSelectedChain] = useState(null);
+    const [selectedChain, setSelectedChain] = useState(1);
     const [clicked, setClicked] = useState(false);
+
+    useEffect(() => {
+        switchChain({ chainId: selectedChain });
+    },
+        [selectedChain]);
 
     return (
         <div
             className="chain_switch"
             style={{
-                position: 'absolute',
-                top: '0%',
-                left: '65%',
-                transform: 'translate(-50 %, -50 %)',
-                backgroundColor: '#292938',
-                color: 'white',
-                borderRadius: '10px',
-                padding: '5px',
-                margin: '5px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                position: "absolute",
+                top: "0%",
+                right: "20.5%",
+                width: "8%",
+                height: "6%",
             }}
         >
             <button
@@ -38,26 +43,78 @@ function ChainSwitch() {
                     backgroundColor: "#292938",
                     color: "white",
                     border: "none",
+                    borderRadius: "10px",
+                    padding: "10px",
+                    margin: "5px",
+                    position: "absolute",
+                    top: "0%",
+                    right: "0%",
+                    width: "100%",
+                    height: "100%",
+                    fontSize: "16px",
+                    cursor: "pointer",
                 }}
-                onClick={() => setClicked(!clicked)}
+                onClick={() => { setClicked(!clicked); console.log("clicked", clicked); }}
             >
-                {chainSupported[selectedChain] ? chainSupported[selectedChain] : "Select Chain"}
+                <div style={{
+                    position: "absolute",
+                    top: "30%",
+                    left: "14%",
+                    fontSize: "16px",
+                }}>
+                    {chainSupported[selectedChain]}
+                </div>
+                <img alt="icon_wallet" src={logoChain[selectedChain]}
+                    style={{
+                        position: "absolute",
+                        top: "27%",
+                        right: "8%",
+                        width: "20px",
+                        height: "20px",
+                    }}
+                ></img>
             </button>
+
             {clicked === true ? chains.map((chain) =>
                 (chainSupported[chain.id]) ? (
                     <button
+                        className={`switch_chain_${chain.id}`}
                         key={chain.id}
                         style={{
-                            position: "absolute",
-                            top: `${indexChain[chain.id] * 25 + 30}px`,
-                            left: "0%",
                             backgroundColor: "#292938",
                             color: "white",
                             border: "none",
+                            padding: "10px",
+                            margin: "5px",
+                            position: "absolute",
+                            top: `${indexChain[chain.id] * 100 + 120}%`,
+                            right: "0%",
+                            width: "100%",
+                            height: "100%",
+                            fontSize: "16px",
+                            cursor: "pointer",
                         }}
-                        onClick={() => { switchChain({ chainId: chain.id }); setSelectedChain(chain.id); setClicked(false); }}
+                        onClick={() => { setSelectedChain(chain.id); setClicked(false); }}
+                        onMouseMove={() => { document.querySelector(`.switch_chain_${chain.id}`).style.opacity = "0.5" }}
+                        onMouseLeave={() => { document.querySelector(`.switch_chain_${chain.id}`).style.opacity = "1" }}
                     >
-                        {chainSupported[chain.id]}
+                        <div style={{
+                            position: "absolute",
+                            top: "30%",
+                            left: "14%",
+                            fontSize: "16px",
+                        }}>
+                            {chainSupported[chain.id]}
+                        </div>
+                        <img alt="icon_wallet" src={logoChain[chain.id]}
+                            style={{
+                                position: "absolute",
+                                top: "27%",
+                                right: "8%",
+                                width: "20px",
+                                height: "20px",
+                            }}
+                        ></img>
                     </button>
                 ) : (<></>)
             ) : (<></>)}

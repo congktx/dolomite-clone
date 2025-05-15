@@ -87,27 +87,21 @@ const DetailStrategy = ({ strategy }) => {
         <div
             className="wrap_detail_strategy"
             style={{
-                position: 'relative',
-                top: '20px',
-                left: '27%',
+                position: 'absolute',
+                top: '0%',
+                left: '0%',
+                width: '100%',
+                height: '100%',
             }}
         >
-            <div className="rainbow-border"
-                style={{
-                    position: 'absolute',
-                    top: '45vh',
-                    left: '25.2%',
-                    zIndex: 4,
-                }}
-            >
-            </div>
+            <div className="rainbow-border"></div>
 
             <div
                 className="detail_strategy"
                 style={{
                     position: 'absolute',
-                    top: '0%',
-                    left: '0%',
+                    top: '5%',
+                    left: '30%',
                     width: '50vw',
                     height: '90vh',
                     backgroundColor: '#292938',
@@ -120,7 +114,7 @@ const DetailStrategy = ({ strategy }) => {
                     className='close_button'
                     style={{
                         position: 'absolute',
-                        top: '1%',
+                        top: '0%',
                         right: '0%',
                         cursor: 'pointer',
                         backgroundColor: 'transparent',

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import '../styles/TagsPanel.css';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -11,11 +11,11 @@ import {
 // Define tag color based on category
 const getTagColor = (tag) => {
     // These colors correspond to the CSS classes defined in TagsPanel.css
-    if (['Stable', 'Sustainable', 'Green', 'Eco-friendly'].includes(tag)) {
+    if (['Stable', 'Yield Maximizing', 'Green', 'Eco-friendly'].includes(tag)) {
         return 'green-tag';
-    } else if (['Savings', 'DeFi', 'Stable Rates', 'Fixed Rate'].includes(tag)) {
+    } else if (['Savings', 'DeFi', 'Δ Neutral', 'Fixed Rate'].includes(tag)) {
         return 'blue-tag';
-    } else if (['Lending', 'Borrowing', 'Yield', 'Staking'].includes(tag)) {
+    } else if (['Lending', 'GMX', 'Yield', 'Staking'].includes(tag)) {
         return 'orange-tag';
     } else if (['High Risk', 'New', 'Experimental', 'Beta'].includes(tag)) {
         return 'red-tag';
@@ -32,11 +32,11 @@ const TagsPanel = ({ position, onClose }) => {
     // List of available tags
     const allTags = [
         // Green tags
-        'Stable', 'Sustainable', 'Green', 'Eco-friendly',
+        'Stable', 'Yield Maximizing', 'Green', 'Eco-friendly',
         // Blue tags
-        'Savings', 'DeFi', 'Stable Rates', 'Fixed Rate',
+        'Savings', 'DeFi', 'Δ Neutral', 'Fixed Rate',
         // Orange tags
-        'Lending', 'Borrowing', 'Yield', 'Staking',
+        'Lending', 'GMX', 'Yield', 'Staking',
         // Red tags
         'High Risk', 'New', 'Experimental', 'Beta'
     ];

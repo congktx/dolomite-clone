@@ -11,6 +11,7 @@ import { http, WagmiProvider, createConfig } from "wagmi";
 import { mainnet, arbitrum } from "wagmi/chains";
 import { metaMask } from "wagmi/connectors";
 import { useSelector } from 'react-redux';
+import raumania_logo from "./component/image/raumania.png";
 
 const config = createConfig({
     ssr: true,
@@ -27,34 +28,34 @@ const client = new QueryClient();
 const strategies = [
     {
         name: "Strategy 1",
-        lever: 7,
+        lever: 2,
         risk: 0,
         chain: "Arbitrum",
-        apr: 14.46,
-        avg_apy_30_day: 18.12,
-        tags: ["Yield Maximizing", "Δ Neutral"],
-        collateral: "ETH",
+        apr: 14.41,
+        avg_apy_30_day: 18.11,
+        tags: ["Yield Maximizing", "Δ Neutral", "GMX"],
+        collateral: "BNB",
         debt: "USDC",
     },
     {
         name: "Strategy 2",
-        lever: 7,
+        lever: 3,
         risk: 1,
         chain: "Ethereum",
-        apr: 14.46,
+        apr: 14.42,
         avg_apy_30_day: 18.12,
-        tags: ["Yield Maximizing", "Δ Neutral"],
-        collateral: "ETH",
+        tags: ["Δ Neutral"],
+        collateral: "DAI",
         debt: "USDC",
     },
     {
         name: "Strategy 3",
-        lever: 7,
+        lever: 4,
         risk: 1,
         chain: "Arbitrum",
-        apr: 14.46,
-        avg_apy_30_day: 18.12,
-        tags: ["Yield Maximizing", "Δ Neutral"],
+        apr: 14.43,
+        avg_apy_30_day: 18.13,
+        tags: ["Yield Maximizing"],
         collateral: "ETH",
         debt: "USDC",
     },
@@ -63,11 +64,11 @@ const strategies = [
         lever: 7,
         risk: 2,
         chain: "Ethereum",
-        apr: 14.46,
-        avg_apy_30_day: 18.12,
-        tags: ["Yield Maximizing", "Δ Neutral"],
+        apr: 14.45,
+        avg_apy_30_day: 18.15,
+        tags: ["Δ Neutral", "GMX"],
         collateral: "ETH",
-        debt: "USDC",
+        debt: "USDT",
     },
 ];
 
@@ -108,13 +109,14 @@ function App() {
         window.addEventListener('scroll', (e) => {
             const scrollY = window.scrollY;
 
-            const detail_strategy = document.querySelector('.detail_strategy');
-            if (detail_strategy) {
-                detail_strategy.style.top = `${scrollY + 10}px`;
+            const wrap_detail_strategy = document.querySelector('.wrap_detail_strategy');
+            if (wrap_detail_strategy) {
+                wrap_detail_strategy.style.top = `${scrollY}px`;
             }
-            const rainbowBorder = document.querySelector('.rainbow-border');
-            if (rainbowBorder) {
-                rainbowBorder.style.top = `${scrollY + 345}px`;
+
+            const tieu_vuong_quoc = document.querySelector('.tieu_vuong_quoc');
+            if (tieu_vuong_quoc) {
+                tieu_vuong_quoc.style.top = `calc(${scrollY}px + 95vh)`;
             }
         });
     }, []);
@@ -134,6 +136,38 @@ function App() {
                         zIndex: 1,
                     }}
                 >
+                    <div className='tieu_vuong_quoc'
+                        style={{
+                            position: 'absolute',
+                            top: '95vh',
+                            left: '0%',
+                            width: '50px',
+                            height: '50px',
+                            zIndex: 1000,
+                            color: '#8fc942',
+                        }}
+                    >
+                        <img alt="rau_ma" src={raumania_logo}
+                            style={{
+                                position: 'absolute',
+                                top: '0%',
+                                left: '0%',
+                                width: '50px',
+                                height: '50px',
+                            }}
+                        ></img>
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: '37%',
+                                left: '100%',
+                                fontSize: '12px',
+                            }}
+                        >
+                            Raumania
+                        </div>
+                    </div>
+
                     <div
                         className='wrap_all_content'
                         style={{
@@ -163,10 +197,8 @@ function App() {
                                     let trueTags = true;
                                     if (selectedTags.length > 0) {
                                         if (tagFilterType === 'all') {
-                                            // All selected tags must be in strategy.tags
                                             trueTags = selectedTags.every(tag => strategy.tags.includes(tag));
                                         } else {
-                                            // At least one selected tag must be in strategy.tags
                                             trueTags = selectedTags.some(tag => strategy.tags.includes(tag));
                                         }
                                     }

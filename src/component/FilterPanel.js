@@ -15,10 +15,8 @@ const ChainIcon = ({ chain }) => {
     switch (chain) {
         case 'Arbitrum':
             return <span className="chain-icon arbitrum">⚪</span>;
-        case 'Berachain':
-            return <span className="chain-icon berachain">⚫</span>;
-        case 'Mantle':
-            return <span className="chain-icon mantle">☀️</span>;
+        case 'Ethereum':
+            return <span className="chain-icon Ethereum">⚫</span>;
         default:
             return null;
     }
@@ -36,24 +34,23 @@ function FilterPanel({ onClose, position = { top: "50px", left: "50px" } }) {
 
     const chains = [
         { id: 'Arbitrum', name: 'Arbitrum' },
-        { id: 'Berachain', name: 'Berachain' },
-        { id: 'Mantle', name: 'Mantle' }
+        { id: 'Ethereum', name: 'Ethereum' },
     ];
 
     const risks = [
-        { id: 'Low', name: 'Low' },
-        { id: 'Med', name: 'Med' },
-        { id: 'High', name: 'High' }
+        { id: 0, name: 'Low' },
+        { id: 1, name: 'Med' },
+        { id: 2, name: 'High' }
     ];
 
     const leverages = [
-        { id: '2x', name: '2x' },
-        { id: '3x', name: '3x' },
-        { id: '4x', name: '4x' },
-        { id: '5x', name: '5x' },
-        { id: '6x', name: '6x' },
-        { id: '7x', name: '7x' },
-        { id: '8x', name: '8x' }
+        { id: 2, name: '2x' },
+        { id: 3, name: '3x' },
+        { id: 4, name: '4x' },
+        { id: 5, name: '5x' },
+        { id: 6, name: '6x' },
+        { id: 7, name: '7x' },
+        { id: 8, name: '8x' }
     ];
 
     const toggleChain = (chain) => {
@@ -67,8 +64,10 @@ function FilterPanel({ onClose, position = { top: "50px", left: "50px" } }) {
     const toggleRisk = (risk) => {
         if (filters.risks.includes(risk.id)) {
             dispatch(removeFilterRisk(risk.id));
+            console.log(filters.risks);
         } else {
             dispatch(addFilterRisk(risk.id));
+            console.log(filters.risks);
         }
     };
 
