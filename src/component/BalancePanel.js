@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import '../styles/BalancePanel.css';
+import { useReadContracts, useAccount, useReadContract, useBalance, useChainId } from 'wagmi';
+import erc20abi from '../abi/erc20.json';
 
 // Lightning bolt icon for Swap button
 const LightningIcon = () => (
@@ -53,19 +55,61 @@ const EthIcon = () => (
     </div>
 );
 
+const BnbIcon = () => (
+    <div className="token-icon bnb">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="16" fill="#F3BA2F" />
+            <path d="M16 6.5L10 19h12L16 6.5z" fill="white" />
+            <path d="M16 25.5L10 13h12L16 25.5z" fill="white" />
+            <path d="M16 11.5L10 24h12L16 11.5z" fill="white" />
+            <path d="M16 18.5L10 6h12L16 18.5z" fill="white" />
+        </svg>
+    </div>
+);
+
 
 const tokenData = [
-    { symbol: 'AAVE', name: 'Aave Token', balance: '0.0000', value: '$0.00', icon: <AaveIcon /> },
-    { symbol: 'ARB', name: 'Arbitrum', balance: '0.0000', value: '$0.00', icon: <ArbIcon /> },
-    { symbol: 'DAI', name: 'Dai Stablecoin', balance: '0.0000', value: '$0.00', icon: <DaiIcon /> },
-    { symbol: 'ETH', name: 'Ethereum', balance: '0.0000', value: '$0.00', icon: <EthIcon /> },
+    // { symbol: 'AAVE', name: 'Aave Token', value: '$0.00', icon: <AaveIcon />, address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52", decimals: 18 },
+    // { symbol: 'ARB', name: 'Arbitrum', value: '$0.00', icon: <ArbIcon />, address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52", decimals: 18 },
+    // { symbol: 'DAI', name: 'Dai Stablecoin', value: '$0.00', icon: <DaiIcon />, address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52", decimals: 18 },
+    // { symbol: 'ETH', name: 'Ethereum', value: '$0.00', icon: <EthIcon />, address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52", decimals: 18 },
+    { symbol: 'BNB', name: 'Binance Coin', value: '$0.00', icon: <BnbIcon />, address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52", decimals: 18 },
 ];
 
 function BalancePanel() {
+    const { address, isConnected } = useAccount()
     const [hideZeroBalances, setHideZeroBalances] = useState(false);
+    const chainId = useChainId();
+
+    const queries = tokenData.map(token => ({
+        address: token.address,
+        abi: [
+            {
+                name: "balanceOf",
+                type: "function",
+                stateMutability: "view",
+                inputs: [{ name: "owner", type: "address" }],
+                outputs: [{ name: "balance", type: "uint256" }],
+            },
+        ],
+        functionName: 'balanceOf',
+        args: [address ? address : ""],
+    }));
+    const balances = (useReadContracts({
+        contracts: queries,
+        enabled: isConnected,
+    })).data;
+    console.log("Queries for balanceOf:", queries);
+    console.log("Balance fetched:", balances);
+
+    const nativeBalance = (useBalance({
+        address: address ? address : "",
+        chainId: chainId,
+    })).data;
+    console.log("Native balance:", nativeBalance);
 
     const filteredTokens = hideZeroBalances
-        ? tokenData.filter(token => parseFloat(token.balance) > 0)
+        ? tokenData.filter((token, index) => balances ? (parseFloat(balances[index].result) > 0) : true)
         : tokenData;
 
     return (
@@ -116,7 +160,8 @@ function BalancePanel() {
                             </div>
                         </div>
                         <div className="token-balance">
-                            <div className="balance-amount">{token.balance}</div>
+                            {/* <div className="balance-amount">{(balances && balances[index].result) ? balances[index].result : '0'}</div> */}
+                            <div className="balance-amount">{nativeBalance ? nativeBalance.formatted : '0'}</div>
                             <div className="balance-value">{token.value}</div>
                         </div>
                     </div>

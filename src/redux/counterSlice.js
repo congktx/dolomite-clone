@@ -14,12 +14,13 @@ const counterSlice = createSlice({
         },
         tags: {
             selectedTags: [],
-            filterType: 'all' // 'all' or 'any'
+            filterType: 'all'
         },
-        sort: 'current_apr_desc', // Default sorting
+        sort: 'current_apr_desc',
         showDetailStrategy: -1,
     },
     reducers: {
+        // filterAssets
         addFilterAssetsCollateral: (state, action) => {
             state.filterAssets.collateral.push(action.payload);
         },
@@ -37,6 +38,7 @@ const counterSlice = createSlice({
             );
         },
 
+        // filters
         addFilterChain: (state, action) => {
             state.filters.chains.push(action.payload);
         },
@@ -46,6 +48,7 @@ const counterSlice = createSlice({
             );
         },
 
+        // risks 
         addFilterRisk: (state, action) => {
             state.filters.risks.push(action.payload);
         },
@@ -55,6 +58,7 @@ const counterSlice = createSlice({
             );
         },
 
+        // leverages
         addFilterLeverage: (state, action) => {
             state.filters.leverages.push(action.payload);
         },
@@ -64,6 +68,7 @@ const counterSlice = createSlice({
             );
         },
 
+        // tags
         addTag: (state, action) => {
             if (!state.tags.selectedTags.includes(action.payload)) {
                 state.tags.selectedTags.push(action.payload);
@@ -81,10 +86,12 @@ const counterSlice = createSlice({
             state.tags.filterType = action.payload;
         },
 
+        // sort
         setSort: (state, action) => {
             state.sort = action.payload;
         },
 
+        // showDetailStrategy
         setShowDetailStrategy: (state, action) => {
             state.showDetailStrategy = action.payload;
         },

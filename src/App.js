@@ -8,18 +8,19 @@ import FilterStrategy from './component/FilterStrategy';
 import BalancePanel from './component/BalancePanel';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { http, WagmiProvider, createConfig } from "wagmi";
-import { mainnet, arbitrum } from "wagmi/chains";
+import { mainnet, arbitrum, bsc } from "wagmi/chains";
 import { metaMask } from "wagmi/connectors";
 import { useSelector } from 'react-redux';
 import raumania_logo from "./component/image/raumania.png";
 
 const config = createConfig({
     ssr: true,
-    chains: [mainnet, arbitrum],
+    chains: [mainnet, arbitrum, bsc],
     connectors: [metaMask()],
     transports: {
         [mainnet.id]: http(),
         [arbitrum.id]: http(),
+        [bsc.id]: http(),
     },
 });
 

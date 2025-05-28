@@ -6,15 +6,18 @@ import eth_logo from "./image/ethereum-logo.png"
 const chainSupported = {
     1: "Ethereum",
     42161: "Arbitrum",
+    56: "BSC"
 };
 const indexChain = {
     1: 0,
     42161: 1,
+    56: 2,
 };
 
 const logoChain = {
     1: eth_logo,
     42161: arbitrum_logo,
+    56: "https://cryptologos.cc/logos/bnb-bnb-logo.svg",
 }
 
 function ChainSwitch() {
