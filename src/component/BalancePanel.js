@@ -99,14 +99,14 @@ function BalancePanel() {
         contracts: queries,
         enabled: isConnected,
     })).data;
-    console.log("Queries for balanceOf:", queries);
-    console.log("Balance fetched:", balances);
+    // console.log("Queries for balanceOf:", queries);
+    // console.log("Balance fetched:", balances);
 
     const nativeBalance = (useBalance({
         address: address ? address : "",
         chainId: chainId,
     })).data;
-    console.log("Native balance:", nativeBalance);
+    // console.log("Native balance:", nativeBalance);
 
     const filteredTokens = hideZeroBalances
         ? tokenData.filter((token, index) => balances ? (parseFloat(balances[index].result) > 0) : true)
@@ -125,14 +125,14 @@ function BalancePanel() {
                 <h2>Congktx Balances <span className="info-icon">ⓘ</span></h2>
             </div>
 
-            <div className="action-button primary">
+            {/* <div className="action-button primary">
                 <span>Swap <LightningIcon /></span>
             </div>
 
             <div className="action-buttons">
                 <div className="action-button secondary">Deposit</div>
                 <div className="action-button secondary">Withdraw</div>
-            </div>
+            </div> */}
 
             <div className="balance-filter">
                 <input

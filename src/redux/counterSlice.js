@@ -17,7 +17,7 @@ const counterSlice = createSlice({
             filterType: 'all'
         },
         sort: 'current_apr_desc',
-        showDetailStrategy: -1,
+        showDetailStrategy: null,
     },
     reducers: {
         // filterAssets

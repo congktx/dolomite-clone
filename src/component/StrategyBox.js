@@ -37,7 +37,7 @@ const witdhTag = {
 
 const levelRows = [20, 45, 60, 120, 160];
 
-function StrategyBox({ index, info }) {
+function StrategyBox({ info }) {
     const [showRiskBox, setShowRiskBox] = useState(false);
     const dispatch = useDispatch();
 
@@ -49,8 +49,8 @@ function StrategyBox({ index, info }) {
         <div
             className="strategy_box"
             style={{
-                top: `${30 + (Math.floor(index / 2) * 48)}%`,
-                left: `${20 + ((index % 2) * 26)}%`,
+                top: `${30 + (Math.floor(info.index / 2) * 48)}%`,
+                left: `${20 + ((info.index % 2) * 26)}%`,
                 width: "25%",
                 height: "46%",
                 position: 'absolute',
@@ -72,7 +72,7 @@ function StrategyBox({ index, info }) {
                 {info.name}
             </div>
 
-            <div
+            {info.lever && <div
                 className='strategy_box_lever'
                 style={{
                     fontFamily: 'open-sans, sans-serif',
@@ -92,7 +92,7 @@ function StrategyBox({ index, info }) {
                 }}
             >
                 {info.lever + "x"}
-            </div>
+            </div>}
 
             <div
                 className='strategy_box_risk'
@@ -313,7 +313,8 @@ function StrategyBox({ index, info }) {
                     }}
                     onClick={() => {
                         console.log('Create Position button clicked');
-                        dispatch(setShowDetailStrategy(index));
+                        dispatch(setShowDetailStrategy(info));
+                        console.log(info);
                     }}
                 >
                     Create Position

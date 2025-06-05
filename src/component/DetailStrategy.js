@@ -40,7 +40,7 @@ const CustomTooltip = ({ active, payload, label }) => {
             <div
                 style={{
                     position: 'absolute',
-                    top: '100%',
+                    top: '-10px',
                     left: '100%',
                     width: '100%',
                     height: '100%',
@@ -66,8 +66,16 @@ const DetailStrategy = ({ strategy }) => {
 
     const chartContainerRef = useRef(null);
     const [chartSize, setChartSize] = useState({ width: 0, height: 0 });
+    const [chartData, setChartData] = useState(data);
 
     useEffect(() => {
+        fetch(`http://localhost:8000/strategy/apr-history?strategy_index=${strategy._i}`)
+            .then(response => response.json())
+            .then(data => {
+                setChartData(data.map(item => ({ value: parseFloat((item.apr * 100).toFixed(2)) })));
+            })
+            .catch(error => console.error('Error fetching strategies:', error));
+
         const updateChartSize = () => {
             if (chartContainerRef.current) {
                 const { offsetWidth, offsetHeight } = chartContainerRef.current;
@@ -122,7 +130,7 @@ const DetailStrategy = ({ strategy }) => {
                         color: 'white',
                     }}
                     onClick={() => {
-                        dispatch(setShowDetailStrategy(-1));
+                        dispatch(setShowDetailStrategy(null));
                     }}
                 >
                     X
@@ -150,7 +158,7 @@ const DetailStrategy = ({ strategy }) => {
                         {strategy.name}
                     </div>
 
-                    <div
+                    {strategy.lever && <div
                         className='strategy_box_lever'
                         style={{
                             fontFamily: 'open-sans, sans-serif',
@@ -170,7 +178,7 @@ const DetailStrategy = ({ strategy }) => {
                         }}
                     >
                         {strategy.lever + "x"}
-                    </div>
+                    </div>}
 
                     <div className='detail_strategy_subtitle'
                         style={{
@@ -224,7 +232,7 @@ const DetailStrategy = ({ strategy }) => {
                             gap: '5px',
                         }}
                     >
-                        {strategy.tags.map((tag, index) => (
+                        {/* {strategy.tags.map((tag, index) => (
                             <div
                                 key={index}
                                 style={{
@@ -241,7 +249,7 @@ const DetailStrategy = ({ strategy }) => {
                             >
                                 {tag}
                             </div>
-                        ))}
+                        ))} */}
                     </div>
                 </div>
                 <div
@@ -284,7 +292,7 @@ const DetailStrategy = ({ strategy }) => {
                         <LineChart
                             width={chartSize.width}
                             height={chartSize.height - 15}
-                            data={data}
+                            data={chartData}
                         >
                             <Tooltip cursor={false} content={<CustomTooltip />} />
                             <Line

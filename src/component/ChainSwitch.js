@@ -26,6 +26,10 @@ function ChainSwitch() {
     const [clicked, setClicked] = useState(false);
 
     useEffect(() => {
+        const storedChain = localStorage.getItem("selectedChain");
+        if (storedChain) {
+            setSelectedChain(parseInt(storedChain));
+        }
         switchChain({ chainId: selectedChain });
     },
         [selectedChain]);
@@ -97,7 +101,7 @@ function ChainSwitch() {
                             fontSize: "16px",
                             cursor: "pointer",
                         }}
-                        onClick={() => { setSelectedChain(chain.id); setClicked(false); }}
+                        onClick={() => { setSelectedChain(chain.id); setClicked(false); localStorage.setItem("selectedChain", chain.id); }}
                         onMouseMove={() => { document.querySelector(`.switch_chain_${chain.id}`).style.opacity = "0.5" }}
                         onMouseLeave={() => { document.querySelector(`.switch_chain_${chain.id}`).style.opacity = "1" }}
                     >

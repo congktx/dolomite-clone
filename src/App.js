@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import StrategyBox from './component/StrategyBox';
 import DetailStrategy from './component/DetailStrategy';
@@ -26,52 +26,66 @@ const config = createConfig({
 
 const client = new QueryClient();
 
-const strategies = [
-    {
-        name: "Strategy 1",
-        lever: 2,
-        risk: 0,
-        chain: "Arbitrum",
-        apr: 14.41,
-        avg_apy_30_day: 18.11,
-        tags: ["Yield Maximizing", "Δ Neutral", "GMX"],
-        collateral: "BNB",
-        debt: "USDC",
+// let strategies = [
+// {
+//     name: "Strategy 1",
+//     lever: 2,
+//     risk: 0,
+//     chain: "Arbitrum",
+//     apr: 14.41,
+//     avg_apy_30_day: 18.11,
+//     tags: ["Yield Maximizing", "Δ Neutral", "GMX"],
+//     collateral: "BNB",
+//     debt: "USDC",
+// },
+// {
+//     name: "Strategy 2",
+//     lever: 3,
+//     risk: 1,
+//     chain: "Ethereum",
+//     apr: 14.42,
+//     avg_apy_30_day: 18.12,
+//     tags: ["Δ Neutral"],
+//     collateral: "DAI",
+//     debt: "USDC",
+// },
+// {
+//     name: "Strategy 3",
+//     lever: 4,
+//     risk: 1,
+//     chain: "Arbitrum",
+//     apr: 14.43,
+//     avg_apy_30_day: 18.13,
+//     tags: ["Yield Maximizing"],
+//     collateral: "ETH",
+//     debt: "USDC",
+// },
+// {
+//     name: "Strategy 4",
+//     lever: 7,
+//     risk: 2,
+//     chain: "Ethereum",
+//     apr: 14.45,
+//     avg_apy_30_day: 18.15,
+//     tags: ["Δ Neutral", "GMX"],
+//     collateral: "ETH",
+//     debt: "USDT",
+// },
+// ];
+
+const address_to_name = {
+    "42161": {
+        "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1": "WETH",
+        "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f": "WBTC",
+        "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8": "USDC.e",
     },
-    {
-        name: "Strategy 2",
-        lever: 3,
-        risk: 1,
-        chain: "Ethereum",
-        apr: 14.42,
-        avg_apy_30_day: 18.12,
-        tags: ["Δ Neutral"],
-        collateral: "DAI",
-        debt: "USDC",
-    },
-    {
-        name: "Strategy 3",
-        lever: 4,
-        risk: 1,
-        chain: "Arbitrum",
-        apr: 14.43,
-        avg_apy_30_day: 18.13,
-        tags: ["Yield Maximizing"],
-        collateral: "ETH",
-        debt: "USDC",
-    },
-    {
-        name: "Strategy 4",
-        lever: 7,
-        risk: 2,
-        chain: "Ethereum",
-        apr: 14.45,
-        avg_apy_30_day: 18.15,
-        tags: ["Δ Neutral", "GMX"],
-        collateral: "ETH",
-        debt: "USDT",
-    },
-];
+};
+
+const chain_id_to_name = {
+    1: "Ethereum",
+    42161: "Arbitrum",
+    56: "BSC",
+};
 
 function App() {
     const filterAssets = useSelector((state) => state.counter.filterAssets);
@@ -81,32 +95,75 @@ function App() {
     const sort = useSelector((state) => state.counter.sort);
     const showDetailStrategy = useSelector((state) => state.counter.showDetailStrategy);
 
+    const [strategies, setStrategies] = useState([]);
+
     const sortStrategies = (strategies, sortType) => {
-        const sorted = [...strategies];
+        const sorted = strategies;
 
         switch (sortType) {
             case 'current_apr_desc':
-                return sorted.sort((a, b) => b.apr - a.apr);
+                sorted.sort((a, b) => b.apr - a.apr);
             case 'current_apr_asc':
-                return sorted.sort((a, b) => a.apr - b.apr);
+                sorted.sort((a, b) => a.apr - b.apr);
             case 'avg_apr_30_desc':
-                return sorted.sort((a, b) => b.avg_apy_30_day - a.avg_apy_30_day);
+                sorted.sort((a, b) => b.avg_apy_30_day - a.avg_apy_30_day);
             case 'avg_apr_30_asc':
-                return sorted.sort((a, b) => a.avg_apy_30_day - b.avg_apy_30_day);
+                sorted.sort((a, b) => a.avg_apy_30_day - b.avg_apy_30_day);
             case 'leverage_desc':
-                return sorted.sort((a, b) => b.lever - a.lever);
+                sorted.sort((a, b) => b.lever - a.lever);
             case 'leverage_asc':
-                return sorted.sort((a, b) => a.lever - b.lever);
+                sorted.sort((a, b) => a.lever - b.lever);
             case 'risk_desc':
-                return sorted.sort((a, b) => b.risk - a.risk);
+                sorted.sort((a, b) => b.risk - a.risk);
             case 'risk_asc':
-                return sorted.sort((a, b) => a.risk - b.risk);
-            default:
-                return sorted;
+                sorted.sort((a, b) => a.risk - b.risk);
         }
+
+        return sorted;
     };
 
     useEffect(() => {
+        async function fetchDataApp() {
+            let strategies_data = [];
+            await fetch('http://localhost:8000/strategy/infos?strategy_index=ALL&token=ALL')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Fetched strategies:", data);
+                    data.forEach(element => {
+                        strategies_data.push({
+                            _i: element._i,
+                            name: `Strategy ${element.strategy_index}`,
+                            index: element.strategy_index - 1,
+                            lever: element.data.n_loop,
+                            risk: Math.floor(Math.random() * 3),
+                            chain: chain_id_to_name[element.strategy_chain_id] || "Unknown",
+                            apr: parseFloat((element.data.apr * 100).toFixed(2)),
+                            avg_apy_30_day: 18.11,
+                            tags: ["Yield Maximizing", "Δ Neutral", "GMX"],
+                            collateral: address_to_name[element.strategy_chain_id]?.[element.data.deposited_token || element.data.first_token] || "Unknown",
+                            debt: address_to_name[element.strategy_chain_id]?.[element.data.borrowed_token || element.data.second_token] || "Unknown",
+                        });
+                    });
+                })
+                .catch(error => console.error('Error fetching strategies:', error));
+            for (let i = 0; i < strategies_data.length; i++) {
+                await fetch(`http://localhost:8000/strategy/apr-history?strategy_index=${strategies_data[i]._i}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let avg = 0;
+                        data.forEach(item => { avg += item.apr; });
+                        avg /= data.length;
+                        avg = parseFloat((avg * 100).toFixed(2));
+                        strategies_data[i].avg_apy_30_day = avg;
+                        console.log(avg, strategies_data[i]._i);
+                    })
+                    .catch(error => console.error('Error fetching APR history:', error));
+            }
+            setStrategies(strategies_data);
+            console.log("Strategies after fetch:", strategies_data);
+        }
+        fetchDataApp();
+
         window.addEventListener('scroll', (e) => {
             const scrollY = window.scrollY;
 
@@ -206,10 +263,9 @@ function App() {
 
                                     return trueCollateral && trueDebt && trueChain && trueRisk && trueLeverage && trueTags;
                                 })
-                                .map((strategy, index) => (
+                                .map((strategy) => (
                                     <StrategyBox
-                                        key={index}
-                                        index={index}
+                                        key={strategy.index}
                                         info={strategy}
                                     />
                                 ))}
@@ -218,9 +274,9 @@ function App() {
                         <ChainSwitch />
                         <Wallet />
                         <BalancePanel />
-                        {showDetailStrategy !== -1 && (
+                        {showDetailStrategy !== null && (
                             <DetailStrategy
-                                strategy={strategies[showDetailStrategy]}
+                                strategy={showDetailStrategy}
                             />
                         )}
                     </div>
