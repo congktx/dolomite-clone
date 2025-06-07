@@ -37,44 +37,11 @@ const client = new QueryClient();
 //     tags: ["Yield Maximizing", "Δ Neutral", "GMX"],
 //     collateral: "BNB",
 //     debt: "USDC",
-// },
-// {
-//     name: "Strategy 2",
-//     lever: 3,
-//     risk: 1,
-//     chain: "Ethereum",
-//     apr: 14.42,
-//     avg_apy_30_day: 18.12,
-//     tags: ["Δ Neutral"],
-//     collateral: "DAI",
-//     debt: "USDC",
-// },
-// {
-//     name: "Strategy 3",
-//     lever: 4,
-//     risk: 1,
-//     chain: "Arbitrum",
-//     apr: 14.43,
-//     avg_apy_30_day: 18.13,
-//     tags: ["Yield Maximizing"],
-//     collateral: "ETH",
-//     debt: "USDC",
-// },
-// {
-//     name: "Strategy 4",
-//     lever: 7,
-//     risk: 2,
-//     chain: "Ethereum",
-//     apr: 14.45,
-//     avg_apy_30_day: 18.15,
-//     tags: ["Δ Neutral", "GMX"],
-//     collateral: "ETH",
-//     debt: "USDT",
-// },
+// }
 // ];
 
 const address_to_name = {
-    "42161": {
+    42161: {
         "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1": "WETH",
         "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f": "WBTC",
         "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8": "USDC.e",
@@ -99,28 +66,30 @@ function App() {
 
     const sortStrategies = (strategies, sortType) => {
         const sorted = strategies;
+        // console.log("Sorting strategies with type:", sortType);
 
-        switch (sortType) {
-            case 'current_apr_desc':
-                sorted.sort((a, b) => b.apr - a.apr);
-            case 'current_apr_asc':
-                sorted.sort((a, b) => a.apr - b.apr);
-            case 'avg_apr_30_desc':
-                sorted.sort((a, b) => b.avg_apy_30_day - a.avg_apy_30_day);
-            case 'avg_apr_30_asc':
-                sorted.sort((a, b) => a.avg_apy_30_day - b.avg_apy_30_day);
-            case 'leverage_desc':
-                sorted.sort((a, b) => b.lever - a.lever);
-            case 'leverage_asc':
-                sorted.sort((a, b) => a.lever - b.lever);
-            case 'risk_desc':
-                sorted.sort((a, b) => b.risk - a.risk);
-            case 'risk_asc':
-                sorted.sort((a, b) => a.risk - b.risk);
+        if (sortType === 'current_apr_desc') {
+            // console.log(sorted.sort((a, b) => b.apr - a.apr));
+            return sorted.sort((a, b) => b.apr - a.apr);
         }
-
-        return sorted;
+        if (sortType === 'current_apr_asc') {
+            // console.log(sorted.sort((a, b) => a.apr - b.apr));
+            return sorted.sort((a, b) => a.apr - b.apr);
+        }
+        if (sortType === 'avg_apr_30_desc') {
+            // console.log(sorted.sort((a, b) => b.avg_apy_30_day - a.avg_apy_30_day));
+            return sorted.sort((a, b) => b.avg_apy_30_day - a.avg_apy_30_day);
+        }
+        if (sortType === 'avg_apr_30_asc') {
+            // console.log(sorted.sort((a, b) => a.avg_apy_30_day - b.avg_apy_30_day));
+            return sorted.sort((a, b) => a.avg_apy_30_day - b.avg_apy_30_day);
+        }
     };
+
+    useEffect(() => {
+        setStrategies(sortStrategies(strategies, sort));
+    }
+        , [sort, strategies]);
 
     useEffect(() => {
         async function fetchDataApp() {
@@ -128,7 +97,7 @@ function App() {
             await fetch('http://localhost:8000/strategy/infos?strategy_index=ALL&token=ALL')
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Fetched strategies:", data);
+                    // console.log("Fetched strategies:", data);
                     data.forEach(element => {
                         strategies_data.push({
                             _i: element._i,
@@ -136,12 +105,16 @@ function App() {
                             index: element.strategy_index - 1,
                             lever: element.data.n_loop,
                             risk: Math.floor(Math.random() * 3),
+                            strategy_chain_id: element.strategy_chain_id,
+                            vault_chain_id: element.vault_chain_id,
                             chain: chain_id_to_name[element.strategy_chain_id] || "Unknown",
                             apr: parseFloat((element.data.apr * 100).toFixed(2)),
                             avg_apy_30_day: 18.11,
                             tags: ["Yield Maximizing", "Δ Neutral", "GMX"],
                             collateral: address_to_name[element.strategy_chain_id]?.[element.data.deposited_token || element.data.first_token] || "Unknown",
                             debt: address_to_name[element.strategy_chain_id]?.[element.data.borrowed_token || element.data.second_token] || "Unknown",
+                            strategy_address: element.strategy_address,
+                            vault_address: element.vault_address,
                         });
                     });
                 })
@@ -155,12 +128,12 @@ function App() {
                         avg /= data.length;
                         avg = parseFloat((avg * 100).toFixed(2));
                         strategies_data[i].avg_apy_30_day = avg;
-                        console.log(avg, strategies_data[i]._i);
+                        // console.log(avg, strategies_data[i]._i);
                     })
                     .catch(error => console.error('Error fetching APR history:', error));
             }
             setStrategies(strategies_data);
-            console.log("Strategies after fetch:", strategies_data);
+            // console.log("Strategies after fetch:", strategies_data);
         }
         fetchDataApp();
 
@@ -240,7 +213,7 @@ function App() {
                         <div
                             className="strategies_container"
                         >
-                            {sortStrategies(strategies, sort)
+                            {strategies
                                 .filter((strategy) => {
                                     // Filter by assets (collateral and debt)
                                     let trueCollateral = (filterAssets.collateral.length === 0) || filterAssets.collateral.includes(strategy.collateral);

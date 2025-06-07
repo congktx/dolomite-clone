@@ -312,9 +312,7 @@ function StrategyBox({ info }) {
                         height: '100%',
                     }}
                     onClick={() => {
-                        console.log('Create Position button clicked');
                         dispatch(setShowDetailStrategy(info));
-                        console.log(info);
                     }}
                 >
                     Create Position

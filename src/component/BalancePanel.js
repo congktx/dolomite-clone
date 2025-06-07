@@ -1,115 +1,99 @@
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/BalancePanel.css';
-import { useReadContracts, useAccount, useReadContract, useBalance, useChainId } from 'wagmi';
-import erc20abi from '../abi/erc20.json';
+import { useAccount, useChainId, usePublicClient } from 'wagmi';
+import erc20Abi from '../abi/erc20.json';
 
-// Lightning bolt icon for Swap button
-const LightningIcon = () => (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M13 2L4.5 12.5H11L9 22L19 9.5H12L13 2Z" fill="#2E86DE" stroke="#2E86DE" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-);
-
-// Token icon components
-const AaveIcon = () => (
-    <div className="token-icon aave">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="16" fill="#B6509E" />
-            <path d="M22.46 17.32l-2.6 4.13h-4.58l3.44-5.5-3.43-5.41h4.59l2.58 4.12 2.52-4.12h4.68l-3.47 5.42 3.46 5.49h-4.7l-2.5-4.13z" fill="white" />
-            <path d="M9.24 11.54L12.5 17.1l-3.26 5.35H4.5l3.27-5.42L4.5 11.54h4.74z" fill="white" />
-        </svg>
-    </div>
-);
-
-const ArbIcon = () => (
-    <div className="token-icon arb">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="16" fill="#28A0F0" />
-            <path d="M16 6.5L10 19h12L16 6.5z" fill="white" />
-            <path d="M16 25.5L10 13h12L16 25.5z" fill="white" />
-        </svg>
-    </div>
-);
-
-const DaiIcon = () => (
-    <div className="token-icon dai">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="16" fill="#F5AC37" />
-            <path d="M16.39 21.87h-5.22v-2.63h5.22c1.68 0 2.7-.76 2.7-2.24s-1.02-2.24-2.7-2.24h-5.22V12h5.22c3.31 0 5.3 1.67 5.3 5s-1.99 4.87-5.3 4.87z" fill="white" />
-            <path d="M10.35 8h5.43v16h-5.43V8z" fill="white" />
-        </svg>
-    </div>
-);
-
-const EthIcon = () => (
-    <div className="token-icon eth">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="16" fill="#627EEA" />
-            <path d="M16.498 8v5.87l4.974 2.22L16.498 8z" fill="white" fillOpacity="0.6" />
-            <path d="M16.498 8L11.525 16.09l4.973-2.22V8z" fill="white" />
-            <path d="M16.498 21.572v2.426L21.476 17.2 16.498 21.572z" fill="white" fillOpacity="0.6" />
-            <path d="M16.498 23.998v-2.426L11.525 17.2l4.973 6.798z" fill="white" />
-            <path d="M16.498 20.291l4.974-2.901-4.974-2.216v5.117z" fill="white" fillOpacity="0.2" />
-            <path d="M11.525 17.39l4.973 2.901v-5.117l-4.973 2.216z" fill="white" fillOpacity="0.6" />
-        </svg>
-    </div>
-);
-
-const BnbIcon = () => (
-    <div className="token-icon bnb">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="16" fill="#F3BA2F" />
-            <path d="M16 6.5L10 19h12L16 6.5z" fill="white" />
-            <path d="M16 25.5L10 13h12L16 25.5z" fill="white" />
-            <path d="M16 11.5L10 24h12L16 11.5z" fill="white" />
-            <path d="M16 18.5L10 6h12L16 18.5z" fill="white" />
-        </svg>
-    </div>
-);
-
-
-const tokenData = [
-    // { symbol: 'AAVE', name: 'Aave Token', value: '$0.00', icon: <AaveIcon />, address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52", decimals: 18 },
-    // { symbol: 'ARB', name: 'Arbitrum', value: '$0.00', icon: <ArbIcon />, address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52", decimals: 18 },
-    // { symbol: 'DAI', name: 'Dai Stablecoin', value: '$0.00', icon: <DaiIcon />, address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52", decimals: 18 },
-    // { symbol: 'ETH', name: 'Ethereum', value: '$0.00', icon: <EthIcon />, address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52", decimals: 18 },
-    { symbol: 'BNB', name: 'Binance Coin', value: '$0.00', icon: <BnbIcon />, address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52", decimals: 18 },
-];
+const listOfTokens = {
+    42161: [
+        {
+            symbol: 'ETH',
+            name: 'weth',
+            tokenAddress: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
+        },
+        {
+            symbol: 'USDT',
+            name: 'tether',
+            tokenAddress: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
+        },
+        {
+            symbol: 'WBTC',
+            name: 'wrapped-bitcoin',
+            tokenAddress: '0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f',
+        },
+        {
+            symbol: 'USDC.e',
+            name: 'usd-coin',
+            tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8'
+        }
+    ]
+};
 
 function BalancePanel() {
-    const { address, isConnected } = useAccount()
+    const { address: userAddress, isConnected } = useAccount()
     const [hideZeroBalances, setHideZeroBalances] = useState(false);
+    const [tokenData, setTokenData] = useState([]);
     const chainId = useChainId();
+    const publicClient = usePublicClient();
 
-    const queries = tokenData.map(token => ({
-        address: token.address,
-        abi: [
-            {
-                name: "balanceOf",
-                type: "function",
-                stateMutability: "view",
-                inputs: [{ name: "owner", type: "address" }],
-                outputs: [{ name: "balance", type: "uint256" }],
-            },
-        ],
-        functionName: 'balanceOf',
-        args: [address ? address : ""],
-    }));
-    const balances = (useReadContracts({
-        contracts: queries,
-        enabled: isConnected,
-    })).data;
-    // console.log("Queries for balanceOf:", queries);
-    // console.log("Balance fetched:", balances);
+    useEffect(() => {
+        const fetchTokenBalances = async () => {
+            console.log("Fetching token balances...", isConnected, userAddress, chainId);
+            if (!isConnected || !userAddress || !listOfTokens[chainId]) {
+                setTokenData([]);
+                return;
+            }
 
-    const nativeBalance = (useBalance({
-        address: address ? address : "",
-        chainId: chainId,
-    })).data;
-    // console.log("Native balance:", nativeBalance);
+            const tokens = listOfTokens[chainId];
+            console.log(tokens)
+            const balancePromises = tokens.map(async (token) => {
+                const contract = {
+                    address: token.tokenAddress,
+                    abi: erc20Abi,
+                };
+
+                try {
+                    const balance = await publicClient.readContract({
+                        ...contract,
+                        functionName: 'balanceOf',
+                        args: [userAddress]
+                    });
+
+                    return {
+                        symbol: token.symbol,
+                        name: token.name,
+                        balance: balance.toString(),
+                        value: '$0.00'
+                    };
+                } catch (error) {
+                    console.error(`Error fetching balance for ${token.symbol}:`, error);
+                    return { symbol: token.symbol, name: token.name, balance: '0', value: '0' };
+                }
+            });
+
+            const balances = await Promise.all(balancePromises);
+            balances.map(((token) => {
+                if (token.balance) {
+                    token.balance = parseFloat(token.balance).toFixed(4);
+                }
+                fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${token.name}&vs_currencies=usd`)
+                    .then(response => response.json())
+                    .then(data => {
+                        token.value = `$${(data[token.name]?.usd * parseFloat(token.balance)).toFixed(2)}`;
+                    })
+                    .catch(error => {
+                        console.error(`Error fetching price for ${token.name}:`, error);
+                        token.value = '$0.00';
+                    });
+            }));
+            setTokenData(balances);
+        };
+
+        fetchTokenBalances();
+    },
+        [chainId, isConnected, userAddress]);
 
     const filteredTokens = hideZeroBalances
-        ? tokenData.filter((token, index) => balances ? (parseFloat(balances[index].result) > 0) : true)
+        ? tokenData.filter((token, index) => token.balance ? (parseFloat(token.balance) > 0) : true)
         : tokenData;
 
     return (
@@ -124,15 +108,6 @@ function BalancePanel() {
             <div className="balance-header">
                 <h2>Congktx Balances <span className="info-icon">ⓘ</span></h2>
             </div>
-
-            {/* <div className="action-button primary">
-                <span>Swap <LightningIcon /></span>
-            </div>
-
-            <div className="action-buttons">
-                <div className="action-button secondary">Deposit</div>
-                <div className="action-button secondary">Withdraw</div>
-            </div> */}
 
             <div className="balance-filter">
                 <input
@@ -150,18 +125,16 @@ function BalancePanel() {
             </div>
 
             <div className="token-list">
-                {filteredTokens.map((token, index) => (
+                {tokenData.map((token, index) => (
                     <div className="token-item" key={index}>
                         <div className="token-info">
-                            {token.icon}
                             <div className="token-details">
                                 <div className="token-symbol">{token.symbol}</div>
                                 <div className="token-name">{token.name}</div>
                             </div>
                         </div>
                         <div className="token-balance">
-                            {/* <div className="balance-amount">{(balances && balances[index].result) ? balances[index].result : '0'}</div> */}
-                            <div className="balance-amount">{nativeBalance ? nativeBalance.formatted : '0'}</div>
+                            <div className="balance-amount">{token.balance ? token.balance : '0'}</div>
                             <div className="balance-value">{token.value}</div>
                         </div>
                     </div>

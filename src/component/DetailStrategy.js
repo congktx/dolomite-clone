@@ -1,10 +1,14 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, use } from 'react';
 import { useDispatch } from 'react-redux';
 import { setShowDetailStrategy } from '../redux/counterSlice';
 import { LineChart, Line, Tooltip } from 'recharts';
 import '../styles/RainbowBorder.css';
 import arbitrum_logo from './image/arbitrum-logo.png';
 import ethereum_logo from './image/ethereum-logo.png';
+import { useAccount, useChainId, usePublicClient, useReadContract, useWriteContract } from 'wagmi';
+import StrategyABI from '../abi/strategy.json';
+import VaultABI from '../abi/vault.json';
+import ERC20ABI from '../abi/erc20.json';
 
 const ctx = document.createElement("canvas").getContext("2d");
 ctx.font = "32px sans-serif";
@@ -68,6 +72,90 @@ const DetailStrategy = ({ strategy }) => {
     const [chartSize, setChartSize] = useState({ width: 0, height: 0 });
     const [chartData, setChartData] = useState(data);
 
+    const { address: userAddress, isConnected } = useAccount();
+    const chainId = useChainId();
+    const { writeContract, isPending, isSuccess, error } = useWriteContract();
+    const publicClient = usePublicClient();
+
+    const handleDeposit = async () => {
+        try {
+            if (chainId !== strategy.strategy_chain_id) {
+                alert(`Please switch to ${strategy.chain} network.`);
+                return;
+            }
+            writeContract({
+                address: strategy.vault_address,
+                abi: VaultABI,
+                functionName: 'deposit',
+                args: [parseFloat(document.querySelector('.input_deposit_amount').value), 0, 0],
+            });
+        } catch (error) {
+            console.error("Error depositing:", error);
+            alert("Error depositing.");
+        }
+    }
+
+    const handleWithdraw = async () => {
+        try {
+            if (chainId !== strategy.strategy_chain_id) {
+                alert(`Please switch to ${strategy.chain} network.`);
+                return;
+            }
+            writeContract({
+                address: strategy.vault_address,
+                abi: VaultABI,
+                functionName: 'withdraw',
+                args: [parseFloat(document.querySelector('.input_withdraw_amount').value), 0],
+            });
+        } catch (error) {
+            console.error("Error withdrawing:", error);
+            alert("Error withdrawing.");
+        }
+    }
+
+    useEffect(() => {
+        if (isSuccess) {
+            alert("Transaction successful!");
+        } else if (error) {
+            console.error("Transaction failed:", error);
+            alert("Transaction failed: " + error.message);
+        }
+    },
+        [isSuccess, error]);
+
+    const getMaxWithdrawAmount = async () => {
+        try {
+            const balance = await publicClient.readContract({
+                address: strategy.strategy_address,
+                abi: StrategyABI,
+                functionName: 'getBalanceOf',
+                args: [userAddress],
+            });
+            console.log("Balance:", balance);
+
+            const totalSupply = await publicClient.readContract({
+                address: strategy.strategy_address,
+                abi: StrategyABI,
+                functionName: 'getTotalSupply',
+                args: [],
+            });
+            console.log("Total supply:", totalSupply);
+
+            const totalAssets = await publicClient.readContract({
+                address: strategy.strategy_address,
+                abi: StrategyABI,
+                functionName: 'getTotalAssets',
+                args: [],
+            });
+            console.log("Total assets:", totalAssets);
+
+            let maxWithdrawAmount = parseFloat(totalSupply > 0 ? (balance / totalSupply) * totalAssets : 0);
+            document.querySelector('.input_withdraw_amount').value = maxWithdrawAmount;
+        } catch (error) {
+            console.error("Error fetching balance:", error);
+        }
+    };
+
     useEffect(() => {
         fetch(`http://localhost:8000/strategy/apr-history?strategy_index=${strategy._i}`)
             .then(response => response.json())
@@ -83,13 +171,25 @@ const DetailStrategy = ({ strategy }) => {
                     width: offsetWidth,
                     height: offsetHeight,
                 });
-                console.log(offsetWidth, offsetHeight);
             }
         };
         updateChartSize();
         const lineChart = document.querySelector('.wrap_line_chart');
         lineChart.addEventListener('resize', updateChartSize);
     }, []);
+
+    const handleInputChange = (e) => {
+        let newValue = e.target.value;
+
+        newValue = newValue.replace(/[^0-9.]/g, '');
+
+        const parts = newValue.split('.');
+        if (parts.length > 2) {
+            newValue = parts[0] + '.' + parts.slice(1).join('');
+        }
+
+        document.querySelector(`.${e.target.className}`).value = newValue;
+    };
 
     return (
         <div
@@ -433,13 +533,189 @@ const DetailStrategy = ({ strategy }) => {
                             gap: '3px',
                         }}
                     >
-                        {String("Doflamingo 36%").split(" ").map((char) => {
+                        {String("Doflamingo 36%").split(" ").map((char, index) => {
                             return (
-                                <span>{char}</span>
+                                <span key={index}>{char}</span>
                             )
                         })}
                     </div>
                 </div>
+
+                <div
+                    className='wrap_deposit'
+                    style={{
+                        position: 'absolute',
+                        top: '3%',
+                        right: '4%',
+                        width: '50%',
+                        height: '17%',
+                        border: 'none',
+                        borderRadius: '6px',
+                        backgroundColor: 'transparent',
+                        color: 'white',
+                    }}
+                >
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: '0%',
+                            left: '0%',
+                            fontSize: '20px',
+                        }}
+                    >
+                        Deposit Amount
+                    </div>
+                    <input
+                        className='input_deposit_amount'
+                        type="text"
+                        placeholder="0.0"
+                        style={{
+                            position: 'absolute',
+                            top: '40px',
+                            left: '0%',
+                            width: '100%',
+                            height: '40px',
+                            borderRadius: '4px',
+                            border: 'none',
+                            fontSize: '16px',
+                            color: 'white',
+                            backgroundColor: '#1e1c29',
+                        }}
+                        onChange={handleInputChange}
+                    />
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: '48px',
+                            right: '10px',
+                        }}
+                    >
+                        {strategy.collateral}
+                    </div>
+                    <button
+                        className='deposit_button'
+                        style={{
+                            position: 'absolute',
+                            bottom: '0%',
+                            right: '0%',
+                            width: '20%',
+                            height: '25%',
+                            backgroundColor: '#565a69',
+                            border: 'none',
+                            borderRadius: '4px',
+                            color: 'white',
+                            fontWeight: 'bold',
+                            fontSize: '11px',
+                            cursor: 'pointer',
+                        }}
+                        onClick={handleDeposit}
+                    >
+                        Deposit
+                    </button>
+                    <button
+                        style={{
+                            position: 'absolute',
+                            top: '23px',
+                            right: '0%',
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            color: '#606375',
+                            fontSize: '13px',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        Max
+                    </button>
+                </div>
+
+                <div
+                    className='wrap_withdraw'
+                    style={{
+                        position: 'absolute',
+                        top: '22%',
+                        right: '4%',
+                        width: '50%',
+                        height: '17%',
+                        border: 'none',
+                        borderRadius: '6px',
+                        backgroundColor: 'transparent',
+                        color: 'white',
+                    }}
+                >
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: '0%',
+                            left: '0%',
+                            fontSize: '20px',
+                        }}
+                    >
+                        Withdraw
+                    </div>
+                    <input
+                        className='input_withdraw_amount'
+                        type="text"
+                        placeholder="0.0"
+                        style={{
+                            position: 'absolute',
+                            top: '40px',
+                            left: '0%',
+                            width: '100%',
+                            height: '40px',
+                            borderRadius: '4px',
+                            border: 'none',
+                            fontSize: '16px',
+                            color: 'white',
+                            backgroundColor: '#1e1c29',
+                        }}
+                        onChange={handleInputChange}
+                    />
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: '48px',
+                            right: '10px',
+                        }}
+                    >
+                        {strategy.collateral}
+                    </div>
+                    <button
+                        className='withdraw_button'
+                        style={{
+                            position: 'absolute',
+                            bottom: '0%',
+                            right: '0%',
+                            width: '20%',
+                            height: '25%',
+                            backgroundColor: '#565a69',
+                            border: 'none',
+                            borderRadius: '4px',
+                            color: 'white',
+                            fontWeight: 'bold',
+                            fontSize: '11px',
+                            cursor: 'pointer',
+                        }}
+                        onClick={handleWithdraw}
+                    >
+                        Withdraw
+                    </button>
+                    <button
+                        style={{
+                            position: 'absolute',
+                            top: '23px',
+                            right: '0%',
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            color: '#606375',
+                            fontSize: '13px',
+                            cursor: 'pointer',
+                        }}
+                        onClick={getMaxWithdrawAmount}
+                    >
+                        Max
+                    </button>
+                </div>
+
             </div>
         </div >
     );

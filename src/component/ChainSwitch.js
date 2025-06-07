@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSwitchChain } from "wagmi"
 import arbitrum_logo from "./image/arbitrum-logo.png"
 import eth_logo from "./image/ethereum-logo.png"
+import bsc_logo from "./image/bsc-logo.png"
 
 const chainSupported = {
     1: "Ethereum",
@@ -17,14 +18,13 @@ const indexChain = {
 const logoChain = {
     1: eth_logo,
     42161: arbitrum_logo,
-    56: "https://cryptologos.cc/logos/bnb-bnb-logo.svg",
+    56: bsc_logo,
 }
 
 function ChainSwitch() {
     const { chains, switchChain } = useSwitchChain()
     const [selectedChain, setSelectedChain] = useState(1);
     const [clicked, setClicked] = useState(false);
-
     useEffect(() => {
         const storedChain = localStorage.getItem("selectedChain");
         if (storedChain) {
