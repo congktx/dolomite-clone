@@ -1,17 +1,26 @@
-# Evironment: Dockerfile for React Application
-FROM node:18-alpine AS build
+# Sử dụng image node phiên bản mới nhất với tag slim để giảm kích thước
+FROM node:16
 
-# Set working directory
+# Thiết lập thư mục làm việc
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package.json package-lock.json ./
+# Sao chép package.json và package-lock.json (nếu có)
+COPY package*.json ./
 
-# Install dependencies
+# Cài đặt các phụ thuộc
 RUN npm install
 
-# Copy the rest of the application code
+# Sao chép toàn bộ mã nguồn
 COPY . .
 
-# Build the React application
+# Build ứng dụng React
 RUN npm run build
+
+# Cài đặt server tĩnh để phục vụ ứng dụng
+RUN npm install -g serve
+
+# Mở port 3001
+EXPOSE 3001
+
+# Lệnh chạy ứng dụng
+CMD ["serve", "-s", "build", "-l", "3001"]
