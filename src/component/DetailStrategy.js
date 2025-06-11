@@ -9,6 +9,7 @@ import { useAccount, useChainId, usePublicClient, useReadContract, useWriteContr
 import StrategyABI from '../abi/strategy.json';
 import VaultABI from '../abi/vault.json';
 import ERC20ABI from '../abi/erc20.json';
+import { API_URL } from '../config/secrect';
 
 const ctx = document.createElement("canvas").getContext("2d");
 ctx.font = "32px sans-serif";
@@ -71,10 +72,12 @@ const DetailStrategy = ({ strategy }) => {
     const chartContainerRef = useRef(null);
     const [chartSize, setChartSize] = useState({ width: 0, height: 0 });
     const [chartData, setChartData] = useState(data);
+    const [currentAction, setCurrentAction] = useState(null);
+    const [currentAmount, setCurrentAmount] = useState(0);
 
-    const { address: userAddress, isConnected } = useAccount();
+    const { address: userAddress } = useAccount();
     const chainId = useChainId();
-    const { writeContract, isPending, isSuccess, error } = useWriteContract();
+    const { writeContract, isSuccess, error } = useWriteContract();
     const publicClient = usePublicClient();
 
     const handleDeposit = async () => {
@@ -83,11 +86,13 @@ const DetailStrategy = ({ strategy }) => {
                 alert(`Please switch to ${strategy.chain} network.`);
                 return;
             }
+            setCurrentAction('deposit');
+            setCurrentAmount(parseFloat(document.querySelector('.input_deposit_amount').value));
             writeContract({
                 address: strategy.vault_address,
                 abi: VaultABI,
                 functionName: 'deposit',
-                args: [parseFloat(document.querySelector('.input_deposit_amount').value), 0, 0],
+                args: [currentAmount, 0, 0],
             });
         } catch (error) {
             console.error("Error depositing:", error);
@@ -101,11 +106,13 @@ const DetailStrategy = ({ strategy }) => {
                 alert(`Please switch to ${strategy.chain} network.`);
                 return;
             }
+            setCurrentAction('withdraw');
+            setCurrentAmount(parseFloat(document.querySelector('.input_withdraw_amount').value));
             writeContract({
                 address: strategy.vault_address,
                 abi: VaultABI,
                 functionName: 'withdraw',
-                args: [parseFloat(document.querySelector('.input_withdraw_amount').value), 0],
+                args: [currentAmount, 0],
             });
         } catch (error) {
             console.error("Error withdrawing:", error);
@@ -116,6 +123,24 @@ const DetailStrategy = ({ strategy }) => {
     useEffect(() => {
         if (isSuccess) {
             alert("Transaction successful!");
+            fetch(`${API_URL}/user/activity`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        address: userAddress,
+                        action: {
+                            strategy_name: strategy.name,
+                            type: currentAction,
+                            amount: currentAmount,
+                        }
+                    }),
+                }
+            ).then(response => response.json())
+                .then(data => console.log("Activity logged:", data))
+                .catch(error => console.error("Error logging activity:", error))
         } else if (error) {
             console.error("Transaction failed:", error);
             alert("Transaction failed: " + error.message);
@@ -157,7 +182,7 @@ const DetailStrategy = ({ strategy }) => {
     };
 
     useEffect(() => {
-        fetch(`http://localhost:8000/strategy/apr-history?strategy_index=${strategy._i}`)
+        fetch(`${API_URL}/strategy/apr-history?strategy_index=${strategy._i}`)
             .then(response => response.json())
             .then(data => {
                 setChartData(data.map(item => ({ value: parseFloat((item.apr * 100).toFixed(2)) })));

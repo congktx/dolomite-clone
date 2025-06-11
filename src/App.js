@@ -5,13 +5,14 @@ import DetailStrategy from './component/DetailStrategy';
 import Wallet from './component/Wallet';
 import ChainSwitch from './component/ChainSwitch';
 import FilterStrategy from './component/FilterStrategy';
-import BalancePanel from './component/BalancePanel';
+import HistoryPanel from './component/HistoryPanel';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { http, WagmiProvider, createConfig } from "wagmi";
 import { mainnet, arbitrum, bsc } from "wagmi/chains";
 import { metaMask } from "wagmi/connectors";
 import { useSelector } from 'react-redux';
 import raumania_logo from "./component/image/raumania.png";
+import { API_URL } from './config/secrect';
 
 const config = createConfig({
     ssr: true,
@@ -94,7 +95,7 @@ function App() {
     useEffect(() => {
         async function fetchDataApp() {
             let strategies_data = [];
-            await fetch('http://localhost:8000/strategy/infos?strategy_index=ALL&token=ALL')
+            await fetch(`${API_URL}/strategy/infos?strategy_index=ALL&token=ALL`)
                 .then(response => response.json())
                 .then(data => {
                     // console.log("Fetched strategies:", data);
@@ -120,7 +121,7 @@ function App() {
                 })
                 .catch(error => console.error('Error fetching strategies:', error));
             for (let i = 0; i < strategies_data.length; i++) {
-                await fetch(`http://localhost:8000/strategy/apr-history?strategy_index=${strategies_data[i]._i}`)
+                await fetch(`${API_URL}/strategy/apr-history?strategy_index=${strategies_data[i]._i}`)
                     .then(response => response.json())
                     .then(data => {
                         let avg = 0;
@@ -246,7 +247,7 @@ function App() {
                         <FilterStrategy />
                         <ChainSwitch />
                         <Wallet />
-                        <BalancePanel />
+                        <HistoryPanel />
                         {showDetailStrategy !== null && (
                             <DetailStrategy
                                 strategy={showDetailStrategy}
