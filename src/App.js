@@ -13,6 +13,7 @@ import { metaMask } from "wagmi/connectors";
 import { useSelector } from 'react-redux';
 import raumania_logo from "./component/image/raumania.png";
 import { API_URL } from './config/secrect';
+import { str } from 'ajv';
 
 const config = createConfig({
     ssr: true,
@@ -100,18 +101,33 @@ function App() {
                 .then(data => {
                     // console.log("Fetched strategies:", data);
                     data.forEach(element => {
+                        let strategy_name = "";
+                        if (element.strategy_index === 1) {
+                            strategy_name = "Loop Lending WETH-WBTC";
+                        }
+                        else if (element.strategy_index === 2) {
+                            strategy_name = "Arbitrage Lending USDC-WETH";
+                        }
+                        let tags = [];
+                        if (element.strategy_index === 1) {
+                            tags = ["Loop", "Lending"];
+                        }
+                        else if (element.strategy_index === 2) {
+                            tags = ["Arbitrage", "Lending"];
+                        }
                         strategies_data.push({
                             _i: element._i,
-                            name: `Strategy ${element.strategy_index}`,
+                            health_factor: element.data.health_factor,
+                            name: strategy_name,
                             index: element.strategy_index - 1,
-                            lever: element.data.n_loop,
-                            risk: Math.floor(Math.random() * 3),
+                            // lever: element.data.n_loop,
+                            // risk: Math.floor(Math.random() * 3),
                             strategy_chain_id: element.strategy_chain_id,
                             vault_chain_id: element.vault_chain_id,
                             chain: chain_id_to_name[element.strategy_chain_id] || "Unknown",
                             apr: parseFloat((element.data.apr * 100).toFixed(2)),
                             avg_apy_30_day: 18.11,
-                            tags: ["Yield Maximizing", "Δ Neutral", "GMX"],
+                            tags: tags,
                             collateral: address_to_name[element.strategy_chain_id]?.[element.data.deposited_token || element.data.first_token] || "Unknown",
                             debt: address_to_name[element.strategy_chain_id]?.[element.data.borrowed_token || element.data.second_token] || "Unknown",
                             strategy_address: element.strategy_address,

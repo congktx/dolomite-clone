@@ -11,13 +11,13 @@ import {
 // Define tag color based on category
 const getTagColor = (tag) => {
     // These colors correspond to the CSS classes defined in TagsPanel.css
-    if (['Stable', 'Yield Maximizing', 'Green', 'Eco-friendly'].includes(tag)) {
+    if (['Arbitrage', 'Loop'].includes(tag)) {
         return 'green-tag';
-    } else if (['Savings', 'DeFi', 'Δ Neutral', 'Fixed Rate'].includes(tag)) {
+    } else if (['Lending'].includes(tag)) {
         return 'blue-tag';
-    } else if (['Lending', 'GMX', 'Yield', 'Staking'].includes(tag)) {
+    } else if ([].includes(tag)) {
         return 'orange-tag';
-    } else if (['High Risk', 'New', 'Experimental', 'Beta'].includes(tag)) {
+    } else if ([].includes(tag)) {
         return 'red-tag';
     }
     // Default color if not in any category
@@ -32,13 +32,11 @@ const TagsPanel = ({ position, onClose }) => {
     // List of available tags
     const allTags = [
         // Green tags
-        'Stable', 'Yield Maximizing', 'Green', 'Eco-friendly',
+        'Arbitrage', 'Loop',
         // Blue tags
-        'Savings', 'DeFi', 'Δ Neutral', 'Fixed Rate',
+        'Lending'
         // Orange tags
-        'Lending', 'GMX', 'Yield', 'Staking',
         // Red tags
-        'High Risk', 'New', 'Experimental', 'Beta'
     ];
 
     // Handle click on tag

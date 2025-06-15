@@ -1,5 +1,5 @@
 # Sử dụng image node phiên bản mới nhất với tag slim để giảm kích thước
-FROM node:16
+FROM node:18
 
 # Thiết lập thư mục làm việc
 WORKDIR /app
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Cài đặt các phụ thuộc
-RUN npm install
+RUN npm install --force
 
 # Sao chép toàn bộ mã nguồn
 COPY . .

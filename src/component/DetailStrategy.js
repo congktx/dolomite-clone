@@ -24,13 +24,15 @@ const logoChains = {
 };
 
 const backgroundColorTag = {
-    "Yield Maximizing": "#228b22",
-    "Δ Neutral": "#5d869e",
+    "Arbitrage": "#228b22",
+    "Lending": "#5d869e",
+    "Loop": "#228b22",
 };
 
 const witdhTag = {
-    "Yield Maximizing": 95.19,
-    "Δ Neutral": 59.6,
+    "Arbitrage": 70.19,
+    "Lending": 59.6,
+    "Loop": 40,
 };
 
 const riskSvgs = [
@@ -316,12 +318,12 @@ const DetailStrategy = ({ strategy }) => {
                         }}
                     >
                         <div className='detail_strategy_logo'>
-                            <img alt={strategy.chain} src={logoChains[strategy.chain]} style={{ width: '20px', height: '20px', marginRight: '5px' }} />
+                            <img alt={strategy.chain} src={logoChains[strategy.chain]} style={{ width: '17px', height: '17px', marginRight: '5px' }} />
                         </div>
                         <div className="detail_strategy_chain">
                             {strategy.chain}
                         </div>
-                        <div className="detail_strategy_risk"
+                        {/* <div className="detail_strategy_risk"
                             style={{
                                 position: 'absolute',
                                 left: '120%',
@@ -330,8 +332,8 @@ const DetailStrategy = ({ strategy }) => {
                         >
                             Risk:
                             {riskSvgs[strategy.risk]}
-                        </div>
-                        <div className="detail_strategy_oracle"
+                        </div> */}
+                        {/* <div className="detail_strategy_oracle"
                             style={{
                                 position: 'absolute',
                                 left: '200%',
@@ -344,7 +346,7 @@ const DetailStrategy = ({ strategy }) => {
                                     <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"></path>
                                 </svg>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div
@@ -357,7 +359,7 @@ const DetailStrategy = ({ strategy }) => {
                             gap: '5px',
                         }}
                     >
-                        {/* {strategy.tags.map((tag, index) => (
+                        {strategy.tags.map((tag, index) => (
                             <div
                                 key={index}
                                 style={{
@@ -374,7 +376,7 @@ const DetailStrategy = ({ strategy }) => {
                             >
                                 {tag}
                             </div>
-                        ))} */}
+                        ))}
                     </div>
                 </div>
                 <div
@@ -461,6 +463,24 @@ const DetailStrategy = ({ strategy }) => {
                             position: 'absolute',
                             top: '70%',
                             left: '3%',
+                            color: 'white',
+                            fontSize: '17px',
+                            display: 'flex',
+                            gap: '5px',
+                        }}
+                    >
+                        Health factor :
+                        <div
+                            style={{ color: 'green' }}
+                        >
+                            {strategy.health_factor !== null ? strategy.health_factor.toString().slice(0, 4) : "N/A"}
+                        </div>
+                    </div>
+                    {/* <div
+                        style={{
+                            position: 'absolute',
+                            top: '70%',
+                            left: '3%',
                             color: '#606375',
                             fontSize: '12px',
                             fontWeight: 'bold',
@@ -542,10 +562,10 @@ const DetailStrategy = ({ strategy }) => {
                                     left: '110%',
                                 }}
                             >
-                                44.08%
+                                {strategy.health_factor !== null ? strategy.health_factor.toString().slice(0, 4) : "N/A"}
                             </span>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div
                         style={{
@@ -570,7 +590,7 @@ const DetailStrategy = ({ strategy }) => {
                     className='wrap_deposit'
                     style={{
                         position: 'absolute',
-                        top: '3%',
+                        top: '10%',
                         right: '4%',
                         width: '50%',
                         height: '17%',
@@ -657,7 +677,7 @@ const DetailStrategy = ({ strategy }) => {
                     className='wrap_withdraw'
                     style={{
                         position: 'absolute',
-                        top: '22%',
+                        top: '29%',
                         right: '4%',
                         width: '50%',
                         height: '17%',

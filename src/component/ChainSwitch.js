@@ -43,6 +43,7 @@ function ChainSwitch() {
                 right: "20.5%",
                 width: "8%",
                 height: "6%",
+                zIndex: 2,
             }}
         >
             <button

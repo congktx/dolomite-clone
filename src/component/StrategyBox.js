@@ -24,15 +24,15 @@ const riskSvgs = [
 ];
 
 const backgroundColorTag = {
-    "Yield Maximizing": "#228b22",
-    "Δ Neutral": "#5d869e",
-    "GMX": "#5d8612",
+    "Arbitrage": "#228b22",
+    "Lending": "#5d869e",
+    "Loop": "#228b22",
 };
 
 const witdhTag = {
-    "Yield Maximizing": 95.19,
-    "Δ Neutral": 59.6,
-    "GMX": 40,
+    "Arbitrage": 70.19,
+    "Lending": 59.6,
+    "Loop": 40,
 };
 
 const levelRows = [20, 45, 60, 120, 160];
@@ -94,7 +94,7 @@ function StrategyBox({ info }) {
                 {info.lever + "x"}
             </div>}
 
-            <div
+            {/* <div
                 className='strategy_box_risk'
                 style={{
                     position: 'absolute',
@@ -125,7 +125,7 @@ function StrategyBox({ info }) {
                         This is the risk information.
                     </div>
                 )}
-            </div>
+            </div> */}
 
             <div className='strategy_box_logo'>
                 <img alt={info.chain} src={logoChains[info.chain]}
