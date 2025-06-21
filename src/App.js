@@ -128,6 +128,8 @@ function App() {
                             apr: parseFloat((element.data.apr * 100).toFixed(2)),
                             avg_apy_30_day: 18.11,
                             tags: tags,
+                            collateral_address: element.data.deposited_token || element.data.first_token,
+                            debt_address: element.data.borrowed_token || element.data.second_token,
                             collateral: address_to_name[element.strategy_chain_id]?.[element.data.deposited_token || element.data.first_token] || "Unknown",
                             debt: address_to_name[element.strategy_chain_id]?.[element.data.borrowed_token || element.data.second_token] || "Unknown",
                             strategy_address: element.strategy_address,

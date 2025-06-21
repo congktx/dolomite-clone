@@ -76,6 +76,8 @@ const DetailStrategy = ({ strategy }) => {
     const [chartData, setChartData] = useState(data);
     const [currentAction, setCurrentAction] = useState(null);
     const [currentAmount, setCurrentAmount] = useState(0);
+    const [collateralChangeRate, setCollateralChangeRate] = useState('0%');
+    const [debtChangeRate, setDebtChangeRate] = useState('0%');
 
     const { address: userAddress } = useAccount();
     const chainId = useChainId();
@@ -184,6 +186,32 @@ const DetailStrategy = ({ strategy }) => {
     };
 
     useEffect(() => {
+        fetch(`${API_URL}/token/change-rate?token_address=${strategy.collateral_address}&chain_id=${strategy.strategy_chain_id}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.changeRate[0] !== '-') {
+                    document.querySelector('.collateral-change-rate').style.color = 'green';
+                } else {
+                    data.changeRate = data.changeRate.slice(1);
+                    document.querySelector('.collateral-change-rate').style.color = 'red';
+                }
+                setCollateralChangeRate(data.changeRate);
+            })
+            .catch(error => console.error('Error fetching collateral change rate:', error));
+
+        fetch(`${API_URL}/token/change-rate?token_address=${strategy.debt_address}&chain_id=${strategy.strategy_chain_id}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.changeRate[0] !== '-') {
+                    document.querySelector('.debt-change-rate').style.color = 'green';
+                } else {
+                    data.changeRate = data.changeRate.slice(1);
+                    document.querySelector('.debt-change-rate').style.color = 'red';
+                }
+                setDebtChangeRate(data.changeRate);
+            })
+            .catch(error => console.error('Error fetching debt change rate:', error));
+
         fetch(`${API_URL}/strategy/apr-history?strategy_index=${strategy._i}`)
             .then(response => response.json())
             .then(data => {
@@ -245,6 +273,25 @@ const DetailStrategy = ({ strategy }) => {
                     borderRadius: '6px',
                 }}
             >
+                <div
+                    className="token-change-rate"
+                    style={{
+                        position: 'absolute',
+                        top: '55%',
+                        left: '46%',
+                        width: '50%',
+                        height: 'fit-content',
+                        fontSize: '16px',
+                        color: 'white',
+                    }}
+                >
+                    <div style={{ position: 'absolute', width: 'fit-content' }}>1 HRS TOKEN CHANGE RATE</div>
+                    <div style={{ position: 'absolute', width: 'fit-content', top: '20px' }}>{strategy.collateral}</div>
+                    <div className='collateral-change-rate' style={{ position: 'absolute', width: 'fit-content', top: '20px', left: '60px' }}>{collateralChangeRate}</div>
+                    <div style={{ position: 'absolute', width: 'fit-content', top: '40px' }}>{strategy.debt}</div>
+                    <div className='debt-change-rate' style={{ position: 'absolute', width: 'fit-content', top: '40px', left: '60px' }}>{debtChangeRate}</div>
+                </div>
+
                 <button
                     className='close_button'
                     style={{
@@ -591,7 +638,7 @@ const DetailStrategy = ({ strategy }) => {
                     style={{
                         position: 'absolute',
                         top: '10%',
-                        right: '4%',
+                        left: '46%',
                         width: '50%',
                         height: '17%',
                         border: 'none',
@@ -678,7 +725,7 @@ const DetailStrategy = ({ strategy }) => {
                     style={{
                         position: 'absolute',
                         top: '29%',
-                        right: '4%',
+                        left: '46%',
                         width: '50%',
                         height: '17%',
                         border: 'none',
