@@ -229,7 +229,7 @@ const DetailStrategy = ({ strategy }) => {
     useEffect(() => {
         let collateralAddress = strategy.collateral_address;
         if (collateralAddress === "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8") {
-            collateralAddress = "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1";
+            collateralAddress = "0xaf88d065e77c8cC2239327C5EDb3A432268e5831";
         }
         fetch(`${API_URL}/token/change-rate?token_address=${collateralAddress}&chain_id=${strategy.strategy_chain_id}`)
             .then(response => response.json())
@@ -849,24 +849,26 @@ const DetailStrategy = ({ strategy }) => {
                         position: 'absolute',
                         top: '47%',
                         left: '46%',
-                        width: '50%',
-                        height: 'fit-content',
+                        width: '29%',
+                        height: '62px',
                         fontSize: '16px',
                         color: 'white',
+                        border: '1px solid #565a69',
+                        borderRadius: '6px',
                     }}
                 >
-                    <div style={{ position: 'absolute', width: 'fit-content' }}>1 HRS TOKEN CHANGE RATE</div>
-                    <div style={{ position: 'absolute', width: 'fit-content', top: '20px' }}>{strategy.collateral}</div>
-                    <div className='collateral-change-rate' style={{ position: 'absolute', width: 'fit-content', top: '20px', left: '60px' }}>{collateralChangeRate}</div>
-                    <div style={{ position: 'absolute', width: 'fit-content', top: '40px' }}>{strategy.debt}</div>
-                    <div className='debt-change-rate' style={{ position: 'absolute', width: 'fit-content', top: '40px', left: '60px' }}>{debtChangeRate}</div>
+                    <div style={{ position: 'absolute', left: '10px', width: 'fit-content' }}>1 HRS TOKEN CHANGE RATE</div>
+                    <div style={{ position: 'absolute', left: '10px', width: 'fit-content', top: '20px' }}>{strategy.collateral}</div>
+                    <div className='collateral-change-rate' style={{ position: 'absolute', width: 'fit-content', top: '20px', left: '70px' }}>{collateralChangeRate}</div>
+                    <div style={{ position: 'absolute', left: '10px', width: 'fit-content', top: '40px' }}>{strategy.debt}</div>
+                    <div className='debt-change-rate' style={{ position: 'absolute', width: 'fit-content', top: '40px', left: '70px' }}>{debtChangeRate}</div>
                 </div>
 
                 <div
                     className='wrap-text'
                     style={{
                         position: 'absolute',
-                        top: '410px',
+                        top: '58%',
                         left: '2%',
                         width: '96%',
                         height: 'fit-content',
