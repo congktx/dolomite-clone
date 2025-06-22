@@ -35,11 +35,27 @@ const witdhTag = {
     "Loop": 40,
 };
 
-const riskSvgs = [
-    <div className="Strategies__RiskWrapper-sc-1mxapcq-47 hpZAbm StyledTooltip-sc-u72fp7-0 gSFEbY"><div className="Strategies__RiskBackground-sc-1mxapcq-48 fpXYGW"><svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SignalCellularAltIcon"><path d="M17 4h3v16h-3zM5 14h3v6H5zm6-5h3v11h-3z"></path></svg></div><div className="Strategies__RiskIcon-sc-1mxapcq-49 hAhMcV"><svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv-green" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SignalCellularAlt1BarIcon"><path d="M5 14h3v6H5v-6z"></path></svg></div><div className="Strategies__RiskTitle-sc-1mxapcq-50 rmrEZ"></div></div>,
-    <div className="Strategies__RiskWrapper-sc-1mxapcq-47 hpZAbm StyledTooltip-sc-u72fp7-0 gSFEbY"><div className="Strategies__RiskBackground-sc-1mxapcq-48 fpXYGW"><svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SignalCellularAltIcon"><path d="M17 4h3v16h-3zM5 14h3v6H5zm6-5h3v11h-3z"></path></svg></div><div className="Strategies__RiskIcon-sc-1mxapcq-49 gNESCe"><svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv-orange" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SignalCellularAlt2BarIcon"><path d="M5 14h3v6H5v-6zm6-5h3v11h-3V9z"></path></svg></div><div className="Strategies__RiskTitle-sc-1mxapcq-50 rmrEZ"></div></div>,
-    <div className="Strategies__RiskWrapper-sc-1mxapcq-47 hpZAbm StyledTooltip-sc-u72fp7-0 gSFEbY"><div className="Strategies__RiskBackground-sc-1mxapcq-48 fpXYGW"><svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SignalCellularAltIcon"><path d="M17 4h3v16h-3zM5 14h3v6H5zm6-5h3v11h-3z"></path></svg></div><div className="Strategies__RiskIcon-sc-1mxapcq-49 jNFwcD"><svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv-red" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SignalCellularAltIcon"><path d="M17 4h3v16h-3zM5 14h3v6H5zm6-5h3v11h-3z"></path></svg></div><div className="Strategies__RiskTitle-sc-1mxapcq-50 rmrEZ"></div></div>
-];
+// const riskSvgs = [
+//     <div className="Strategies__RiskWrapper-sc-1mxapcq-47 hpZAbm StyledTooltip-sc-u72fp7-0 gSFEbY"><div className="Strategies__RiskBackground-sc-1mxapcq-48 fpXYGW"><svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SignalCellularAltIcon"><path d="M17 4h3v16h-3zM5 14h3v6H5zm6-5h3v11h-3z"></path></svg></div><div className="Strategies__RiskIcon-sc-1mxapcq-49 hAhMcV"><svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv-green" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SignalCellularAlt1BarIcon"><path d="M5 14h3v6H5v-6z"></path></svg></div><div className="Strategies__RiskTitle-sc-1mxapcq-50 rmrEZ"></div></div>,
+//     <div className="Strategies__RiskWrapper-sc-1mxapcq-47 hpZAbm StyledTooltip-sc-u72fp7-0 gSFEbY"><div className="Strategies__RiskBackground-sc-1mxapcq-48 fpXYGW"><svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SignalCellularAltIcon"><path d="M17 4h3v16h-3zM5 14h3v6H5zm6-5h3v11h-3z"></path></svg></div><div className="Strategies__RiskIcon-sc-1mxapcq-49 gNESCe"><svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv-orange" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SignalCellularAlt2BarIcon"><path d="M5 14h3v6H5v-6zm6-5h3v11h-3V9z"></path></svg></div><div className="Strategies__RiskTitle-sc-1mxapcq-50 rmrEZ"></div></div>,
+//     <div className="Strategies__RiskWrapper-sc-1mxapcq-47 hpZAbm StyledTooltip-sc-u72fp7-0 gSFEbY"><div className="Strategies__RiskBackground-sc-1mxapcq-48 fpXYGW"><svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SignalCellularAltIcon"><path d="M17 4h3v16h-3zM5 14h3v6H5zm6-5h3v11h-3z"></path></svg></div><div className="Strategies__RiskIcon-sc-1mxapcq-49 jNFwcD"><svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv-red" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SignalCellularAltIcon"><path d="M17 4h3v16h-3zM5 14h3v6H5zm6-5h3v11h-3z"></path></svg></div><div className="Strategies__RiskTitle-sc-1mxapcq-50 rmrEZ"></div></div>
+// ];
+
+const descriptions = {
+    "Loop Lending WETH-WBTC": "This strategy automatically optimizes yield by using WETH as collateral and borrowing WBTC through the Aave protocol. By utilizing flash loans and a looping technique, the strategy repeatedly deposits and borrows to maximize the leverage ratio. The entire process is automated, transparent, and decentralized, allowing users to earn profits by taking advantage of interest rate differences between the collateral and the borrowed asset.",
+    "Arbitrage Lending USDC-WETH": "This strategy automates a cross-market leverage loop between USDC and WETH using two separate Silo V1 lending pools. By repeatedly supplying USDC in one pool and borrowing WETH, then supplying the borrowed WETH in another pool to borrow USDC again, it builds a cyclical leveraged position across both assets. The loop is executed multiple times to maximize capital efficiency and potential yield, enabling users to benefit from interest rate differentials. All operations are fully automated, with built-in cooldowns and safety controls for reliable and decentralized execution.",
+};
+
+const risks = {
+    "Loop Lending WETH-WBTC": "By using leverage through repeated deposit-and-borrow loops, it becomes susceptible to liquidation if the price of WETH drops or the borrowing rate for WBTC rises sharply. Moreover, it relies heavily on smart contracts from Aave and flash loan providers, meaning that any bug, vulnerability, or technical failure could result in a total loss of user funds. Interest rate fluctuations, inaccurate price oracles, Ethereum network congestion (leading to high gas fees), and the complexity of interacting with multiple protocols (composability risk) further contribute to the potential downsides.",
+    "Arbitrage Lending USDC-WETH": "The repeated borrowing and supplying between two Silo V1 lending pools creates a highly leveraged position that is sensitive to price fluctuations and interest rate changes on both USDC and WETH. A significant drop in WETH price or a sharp increase in borrowing rates could trigger liquidation or result in negative yield. The reliance on two separate lending pools increases composability risk—any failure or mispricing in one pool can cascade across the entire position. Additionally, oracle manipulation, or flash loan vulnerabilities may lead to loss of funds.",
+};
+
+const calculateDaysAgo = (days) => {
+    let date = parseInt(Date.now());
+    date -= days * 24 * 60 * 60 * 1000;
+    return new Date(date).toISOString().split('T')[0];
+};
 
 const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -49,7 +65,7 @@ const CustomTooltip = ({ active, payload, label }) => {
                     position: 'absolute',
                     top: '-10px',
                     left: '100%',
-                    width: '100%',
+                    width: '150px',
                     height: '100%',
                     backgroundColor: '#292938',
                     fontSize: '12px',
@@ -61,7 +77,7 @@ const CustomTooltip = ({ active, payload, label }) => {
             >
                 {/* <p style={{ margin: 0, fontWeight: 'bold' }}>{`Điểm: ${label}`}</p> */}
                 {/* <p style={{ margin: 0, color: '#8884d8' }}>{`${payload[0].value.toFixed(2)}%`}</p> */}
-                {`${payload[0].value.toFixed(2)}%`}
+                {calculateDaysAgo(31 - label) + `:    ${payload[0].value.toFixed(2)}%`}
             </div>
         );
     }
@@ -152,6 +168,31 @@ const DetailStrategy = ({ strategy }) => {
     },
         [isSuccess, error]);
 
+    const getMaxDepositAmount = async () => {
+        try {
+            const balance = await publicClient.readContract({
+                address: strategy.collateral_address,
+                abi: ERC20ABI,
+                functionName: 'balanceOf',
+                args: [userAddress],
+            });
+            console.log("Balance:", balance);
+
+            const decimals = await publicClient.readContract({
+                address: strategy.collateral_address,
+                abi: ERC20ABI,
+                functionName: 'decimals',
+                args: [],
+            });
+            console.log("Decimals:", decimals);
+
+            let maxDepositAmount = parseFloat(parseFloat(balance) / (10 ** parseFloat(decimals))).toFixed(10);
+            document.querySelector('.input_deposit_amount').value = maxDepositAmount;
+        } catch (error) {
+            console.error("Error fetching max deposit:", error);
+        }
+    };
+
     const getMaxWithdrawAmount = async () => {
         try {
             const balance = await publicClient.readContract({
@@ -178,7 +219,7 @@ const DetailStrategy = ({ strategy }) => {
             });
             console.log("Total assets:", totalAssets);
 
-            let maxWithdrawAmount = parseFloat(totalSupply > 0 ? (balance / totalSupply) * totalAssets : 0);
+            let maxWithdrawAmount = parseFloat(totalSupply > 0 ? (balance / totalSupply) * totalAssets : 0).toFixed(10);
             document.querySelector('.input_withdraw_amount').value = maxWithdrawAmount;
         } catch (error) {
             console.error("Error fetching balance:", error);
@@ -186,7 +227,11 @@ const DetailStrategy = ({ strategy }) => {
     };
 
     useEffect(() => {
-        fetch(`${API_URL}/token/change-rate?token_address=${strategy.collateral_address}&chain_id=${strategy.strategy_chain_id}`)
+        let collateralAddress = strategy.collateral_address;
+        if (collateralAddress === "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8") {
+            collateralAddress = "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1";
+        }
+        fetch(`${API_URL}/token/change-rate?token_address=${collateralAddress}&chain_id=${strategy.strategy_chain_id}`)
             .then(response => response.json())
             .then(data => {
                 if (data.changeRate[0] !== '-') {
@@ -215,6 +260,9 @@ const DetailStrategy = ({ strategy }) => {
         fetch(`${API_URL}/strategy/apr-history?strategy_index=${strategy._i}`)
             .then(response => response.json())
             .then(data => {
+                if (data.length > 31) {
+                    data = data.slice(-31);
+                }
                 setChartData(data.map(item => ({ value: parseFloat((item.apr * 100).toFixed(2)) })));
             })
             .catch(error => console.error('Error fetching strategies:', error));
@@ -241,6 +289,11 @@ const DetailStrategy = ({ strategy }) => {
         const parts = newValue.split('.');
         if (parts.length > 2) {
             newValue = parts[0] + '.' + parts.slice(1).join('');
+        }
+
+        const dotIndex = newValue.indexOf('.');
+        if (newValue.length - 1 - dotIndex > 10 && dotIndex !== -1) {
+            newValue = newValue.slice(0, dotIndex + 11);
         }
 
         document.querySelector(`.${e.target.className}`).value = newValue;
@@ -273,25 +326,6 @@ const DetailStrategy = ({ strategy }) => {
                     borderRadius: '6px',
                 }}
             >
-                <div
-                    className="token-change-rate"
-                    style={{
-                        position: 'absolute',
-                        top: '55%',
-                        left: '46%',
-                        width: '50%',
-                        height: 'fit-content',
-                        fontSize: '16px',
-                        color: 'white',
-                    }}
-                >
-                    <div style={{ position: 'absolute', width: 'fit-content' }}>1 HRS TOKEN CHANGE RATE</div>
-                    <div style={{ position: 'absolute', width: 'fit-content', top: '20px' }}>{strategy.collateral}</div>
-                    <div className='collateral-change-rate' style={{ position: 'absolute', width: 'fit-content', top: '20px', left: '60px' }}>{collateralChangeRate}</div>
-                    <div style={{ position: 'absolute', width: 'fit-content', top: '40px' }}>{strategy.debt}</div>
-                    <div className='debt-change-rate' style={{ position: 'absolute', width: 'fit-content', top: '40px', left: '60px' }}>{debtChangeRate}</div>
-                </div>
-
                 <button
                     className='close_button'
                     style={{
@@ -508,7 +542,7 @@ const DetailStrategy = ({ strategy }) => {
                     <div
                         style={{
                             position: 'absolute',
-                            top: '70%',
+                            top: '75%',
                             left: '3%',
                             color: 'white',
                             fontSize: '17px',
@@ -660,7 +694,7 @@ const DetailStrategy = ({ strategy }) => {
                     <input
                         className='input_deposit_amount'
                         type="text"
-                        placeholder="0.0"
+                        placeholder="0.0000000000"
                         style={{
                             position: 'absolute',
                             top: '40px',
@@ -715,6 +749,7 @@ const DetailStrategy = ({ strategy }) => {
                             fontSize: '13px',
                             cursor: 'pointer',
                         }}
+                        onClick={getMaxDepositAmount}
                     >
                         Max
                     </button>
@@ -747,7 +782,7 @@ const DetailStrategy = ({ strategy }) => {
                     <input
                         className='input_withdraw_amount'
                         type="text"
-                        placeholder="0.0"
+                        placeholder="0.0000000000"
                         style={{
                             position: 'absolute',
                             top: '40px',
@@ -806,6 +841,94 @@ const DetailStrategy = ({ strategy }) => {
                     >
                         Max
                     </button>
+                </div>
+
+                <div
+                    className="token-change-rate"
+                    style={{
+                        position: 'absolute',
+                        top: '47%',
+                        left: '46%',
+                        width: '50%',
+                        height: 'fit-content',
+                        fontSize: '16px',
+                        color: 'white',
+                    }}
+                >
+                    <div style={{ position: 'absolute', width: 'fit-content' }}>1 HRS TOKEN CHANGE RATE</div>
+                    <div style={{ position: 'absolute', width: 'fit-content', top: '20px' }}>{strategy.collateral}</div>
+                    <div className='collateral-change-rate' style={{ position: 'absolute', width: 'fit-content', top: '20px', left: '60px' }}>{collateralChangeRate}</div>
+                    <div style={{ position: 'absolute', width: 'fit-content', top: '40px' }}>{strategy.debt}</div>
+                    <div className='debt-change-rate' style={{ position: 'absolute', width: 'fit-content', top: '40px', left: '60px' }}>{debtChangeRate}</div>
+                </div>
+
+                <div
+                    className='wrap-text'
+                    style={{
+                        position: 'absolute',
+                        top: '410px',
+                        left: '2%',
+                        width: '96%',
+                        height: 'fit-content',
+                    }}
+                >
+                    <div
+                        className='description-strategy-title'
+                        style={{
+                            width: 'fit-content',
+                            height: 'fit-content',
+                            color: 'white',
+                            fontSize: '18px',
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        Why the Strategy Works
+                    </div>
+                    <div
+                        className='description-strategy'
+                    >
+                        <div
+                            style={{
+                                width: '100%',
+                                height: 'fit-content',
+                                color: 'white',
+                                fontSize: '14px',
+                                overflowY: 'auto',
+                                textAlign: 'left'
+                            }}
+                        >
+                            {descriptions[strategy.name] || ""}
+                        </div>
+                    </div>
+
+                    <div
+                        className='risk-title'
+                        style={{
+                            width: 'fit-content',
+                            height: 'fit-content',
+                            color: 'white',
+                            fontSize: '18px',
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        Risks
+                    </div>
+                    <div
+                        className='risk-strategy'
+                    >
+                        <div
+                            style={{
+                                width: '100%',
+                                height: 'fit-content',
+                                color: 'white',
+                                fontSize: '14px',
+                                overflowY: 'auto',
+                                textAlign: 'left'
+                            }}
+                        >
+                            {risks[strategy.name] || ""}
+                        </div>
+                    </div>
                 </div>
 
             </div>

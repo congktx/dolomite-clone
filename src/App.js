@@ -13,7 +13,7 @@ import { metaMask } from "wagmi/connectors";
 import { useSelector } from 'react-redux';
 import raumania_logo from "./component/image/raumania.png";
 import { API_URL } from './config/secrect';
-import { str } from 'ajv';
+import page_logo from './component/image/page_logo.png';
 
 const config = createConfig({
     ssr: true,
@@ -229,6 +229,44 @@ function App() {
                             backgroundColor: '#171621',
                         }}
                     >
+                        <div
+                            className='header-page'
+                            style={{
+                                position: 'absolute',
+                                top: '8%',
+                                left: '22%',
+                                width: 'fit-content',
+                                height: '90px',
+                            }}
+                        >
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    top: '-10%',
+                                    left: '0%',
+                                    width: 'fit-content',
+                                    height: 'fit-content',
+                                    fontSize: '90px',
+                                    fontWeight: 'bold',
+                                    color: '#0e2f59',
+                                }}
+                            >
+                                LEVEREST
+                            </div>
+
+                            <img
+                                alt="page_logo"
+                                src={page_logo}
+                                style={{
+                                    position: 'absolute',
+                                    top: '0%',
+                                    left: '430px',
+                                    witdh: '90px',
+                                    height: '90px',
+                                }}
+                            />
+                        </div>
+
                         <div
                             className="strategies_container"
                         >
